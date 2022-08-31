@@ -1,18 +1,37 @@
 import styled, { css } from 'styled-components/native';
+import { RFValue } from 'react-native-responsive-fontsize'
 
 export const Container = styled.View`
   ${({ theme }) => css`
     flex: 1;
-    justify-content: center;
-    align-items: center;
 
-    background: ${theme.colors.main};
+    background: ${theme.colors.shape};
   `}
 `;
 
-export const Title = styled.Text`
+export const Header = styled.View`
   ${({ theme }) => css`
-    font-size: 30px;
-    font-family: ${theme.fonts.secondary_400};
+
+    width: 100%;
+    height: 113px;
+
+    background-color: ${theme.colors.header};
+    justify-content: flex-end;
+    padding: 32px 24px;
+  `}
+`;
+
+export const HeaderContent = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+
+export const TotalCars = styled.Text`
+  ${({ theme }) => css`
+    font-size: ${RFValue(15)};
+    background-color: ${theme.fonts.primary_400};
+    color: ${theme.colors.text};
   `}
 `;
