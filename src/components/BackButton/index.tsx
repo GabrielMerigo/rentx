@@ -17,7 +17,7 @@ export function BackButton({ color, ...rest }: BackButtonProps){
     <S.Container {...rest}>
       <MaterialIcons 
         name="chevron-left"
-        size={24}
+        size={30}
         color={color ? color : theme.colors.text}
       />
     </S.Container>
