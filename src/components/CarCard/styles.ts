@@ -37,7 +37,7 @@ export const About = styled.View`
   flex-direction: row;
   align-items: center;
 
-  margin-bottom: 16px;
+  margin-top: 16px;
 `;
 
 export const Rent = styled.View`
@@ -46,25 +46,27 @@ export const Rent = styled.View`
 
 export const Period = styled.Text`
  ${({ theme }) => css`
-    margin-right: 24px;
-    color: ${theme.colors.title};
-    font-size: ${RFValue(15)}px;
+    font-family: ${theme.fonts.secondary_500};
+    color: ${theme.colors.text_detail};
+    font-size: ${RFValue(10)}px;
+
+    text-transform: uppercase;
   `}
 `;
 
 export const Price = styled.Text`
   ${({ theme }) => css`
     font-family: ${theme.fonts.secondary_500};
-    color: ${theme.colors.text_detail};
-    font-size: ${RFValue(10)}px;
+    color: ${theme.colors.main};
+    font-size: ${RFValue(15)}px;
   `}
 `;
 
 export const Type = styled.View`
-
+  margin-top: 10px;
 `;
 
 export const CarImage = styled.Image`
-  width: 167px;
-  height: 85px;
+  width: 180px;
+  height: 92px;
 `;
