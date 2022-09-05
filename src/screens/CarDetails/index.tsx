@@ -1,7 +1,16 @@
 import { StatusBar } from 'expo-status-bar'
+import { Acessory } from '../../components/Acessory'
 import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import * as S from './styles'
+
+import SpeedSvg from '../../assets/speed.svg';
+import AccelerationSVG from '../../assets/acceleration.svg';
+import ForceSvg from '../../assets/force.svg';
+import GasolineSvg from '../../assets/gasoline.svg';
+import ExchangeSvg from '../../assets/exchange.svg';
+import PeopleSvg from '../../assets/people.svg';
+import { Button } from '../../components/Button'
 
 export function CarDetails() {
   return (
@@ -29,12 +38,35 @@ export function CarDetails() {
           </S.Rent>
         </S.Details>
 
+        <S.Acessories>
+          <Acessory name="380km/h" icon={SpeedSvg} />
+          <Acessory name="3.2s" icon={AccelerationSVG} />
+          <Acessory name="800 HP" icon={ForceSvg} />
+          <Acessory name="Gasoline" icon={GasolineSvg} />
+          <Acessory name="Auto" icon={ExchangeSvg} />
+          <Acessory name="2 people" icon={PeopleSvg} />
+        </S.Acessories>
+
+        <S.About>
+          Este é automóvel desportivo.
+          Surgiu do lendário touro de lide indultado na praça Real Maestranza de Sevilla.
+          É um belíssimo carro para quem gosta de acelerar.
+        </S.About>
+        <S.About>
+          Este é automóvel desportivo.
+          Surgiu do lendário touro de lide indultado na praça Real Maestranza de Sevilla.
+          É um belíssimo carro para quem gosta de acelerar.
+        </S.About>
         <S.About>
           Este é automóvel desportivo.
           Surgiu do lendário touro de lide indultado na praça Real Maestranza de Sevilla.
           É um belíssimo carro para quem gosta de acelerar.
         </S.About>
       </S.Content>
+
+      <S.Footer>
+        <Button color="red" title="Confirmar" />
+      </S.Footer>
     </S.Container>
   )
 }
