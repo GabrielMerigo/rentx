@@ -5,6 +5,7 @@ import * as S from './styles';
 import ArrowSvg from '../../assets/arrow.svg';
 import { StatusBar } from "react-native";
 import { Button } from '../../components/Button';
+import { Calendar } from '../../components/Calendar';
 
 
 export function Scheduling() {
@@ -41,7 +42,7 @@ export function Scheduling() {
       </S.Header>
 
       <S.Content>
-
+        <Calendar />
       </S.Content>
 
       <S.Footer>
