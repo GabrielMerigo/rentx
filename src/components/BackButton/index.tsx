@@ -10,14 +10,14 @@ type BackButtonProps = {
   color?: string;
 } & TouchableWithoutFeedbackProps
 
-export function BackButton({ color, ...rest }: BackButtonProps){
+export function BackButton({ color, ...rest }: BackButtonProps) {
   const theme = useTheme();
 
   return (
     <S.Container {...rest}>
-      <MaterialIcons 
+      <MaterialIcons
         name="chevron-left"
-        size={30}
+        size={25}
         color={color ? color : theme.colors.text}
       />
     </S.Container>
