@@ -3,16 +3,16 @@ import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import * as S from './styles'
 
-export function CarDetails(){
+export function CarDetails() {
   return (
     <S.Container>
       <S.Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={() => { }} />
       </S.Header>
 
       <S.CarImages>
         <ImageSlider
-          imagesUrl={['https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png']} 
+          imagesUrl={['https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png']}
         />
       </S.CarImages>
 
@@ -20,14 +20,20 @@ export function CarDetails(){
         <S.Details>
           <S.Description>
             <S.Brand>Lamborghini</S.Brand>
-            <S.Name>Name</S.Name>
+            <S.Name>Huracan</S.Name>
           </S.Description>
 
           <S.Rent>
-            <S.Period>Ao dia</S.Period>
+            <S.Period>Per day</S.Period>
             <S.Price>$ 100</S.Price>
           </S.Rent>
         </S.Details>
+
+        <S.About>
+          Este é automóvel desportivo.
+          Surgiu do lendário touro de lide indultado na praça Real Maestranza de Sevilla.
+          É um belíssimo carro para quem gosta de acelerar.
+        </S.About>
       </S.Content>
     </S.Container>
   )
