@@ -11,7 +11,7 @@ type CarCardProps = {
   thumbnail: string;
 }
 
-export function CarCard({ brand, name, rent, thumbnail }: CarCardProps){
+export function CarCard({ brand, name, rent, thumbnail }: CarCardProps) {
   return (
     <S.Container>
       <S.Details>

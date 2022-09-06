@@ -11,8 +11,14 @@ import GasolineSvg from '../../assets/gasoline.svg';
 import ExchangeSvg from '../../assets/exchange.svg';
 import PeopleSvg from '../../assets/people.svg';
 import { Button } from '../../components/Button'
+import { Feather } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize'
+import { useTheme } from 'styled-components'
 
-export function CarDetails() {
+export function SchedulingDetails() {
+  const theme = useTheme()
+
+
   return (
     <S.Container>
       <S.Header>
@@ -47,11 +53,41 @@ export function CarDetails() {
           <Acessory name="2 people" icon={PeopleSvg} />
         </S.Acessories>
 
-        <S.About>
-          Este é automóvel desportivo.
-          Surgiu do lendário touro de lide indultado na praça Real Maestranza de Sevilla.
-          É um belíssimo carro para quem gosta de acelerar.
-        </S.About>
+        <S.RentalPeriod>
+          <S.CalendarIcon>
+            <Feather
+              name="calendar"
+              size={RFValue(24)}
+              color={theme.colors.shape}
+            />
+          </S.CalendarIcon>
+
+          <S.DateInfo>
+            <S.DateTitle>DE</S.DateTitle>
+            <S.DateValue>18/06/2021</S.DateValue>
+          </S.DateInfo>
+
+          <Feather
+            name="chevron-right"
+            size={RFValue(10)}
+            color={theme.colors.shape}
+          />
+
+          <S.DateInfo>
+            <S.DateTitle>DE</S.DateTitle>
+            <S.DateValue>18/06/2021</S.DateValue>
+          </S.DateInfo>
+        </S.RentalPeriod>
+
+        <S.RentalPrice>
+          <S.RentalPriceLabel>TOTAL</S.RentalPriceLabel>
+          <S.RentalPriceDetails>
+            <S.RentalPriceQuota>$ 90 x3 daily</S.RentalPriceQuota>
+            <S.RentalPriceTotal>$ 260</S.RentalPriceTotal>
+          </S.RentalPriceDetails>
+        </S.RentalPrice>
+
+
       </S.Content>
 
       <S.Footer>
