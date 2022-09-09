@@ -10,10 +10,10 @@ import { useNavigation } from '@react-navigation/native';
 
 
 export function Scheduling() {
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
 
   function handleConfirmRental() {
-    navigate('SchedulingDetails' as any);
+    navigate('SchedulingDetails' as never, {} as never);
   }
 
 
@@ -26,7 +26,7 @@ export function Scheduling() {
           backgroundColor='transparent'
         />
 
-        <BackButton color={theme.colors.background_secondary} />
+        <BackButton onPress={() => goBack()} color={theme.colors.background_secondary} />
 
         <S.Title>
           Escolha uma {'\n'}

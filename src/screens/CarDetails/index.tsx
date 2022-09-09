@@ -12,19 +12,20 @@ import ExchangeSvg from '../../assets/exchange.svg';
 import PeopleSvg from '../../assets/people.svg';
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
+import theme from '../../styles/theme'
 
 export function CarDetails() {
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
 
   function handleConfirmRental() {
-    navigate('Scheduling');
+    navigate('Scheduling' as never, {} as never);
   }
 
 
   return (
     <S.Container>
       <S.Header>
-        <BackButton onPress={() => { }} />
+        <BackButton onPress={() => goBack()} />
       </S.Header>
 
       <S.CarImages>
@@ -63,7 +64,7 @@ export function CarDetails() {
       </S.Content>
 
       <S.Footer>
-        <Button color="red" title="Choose Rental Period " onPress={handleConfirmRental} />
+        <Button color={theme.colors.main} title="Choose Rental Period " onPress={handleConfirmRental} />
       </S.Footer>
     </S.Container>
   )

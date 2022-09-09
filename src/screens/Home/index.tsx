@@ -11,7 +11,7 @@ export function Home() {
   const { navigate } = useNavigation();
 
   function handleCarDetails() {
-    navigate('CarDetails' as any);
+    navigate('CarDetails' as never, {} as never);
   }
 
   const carData = {
@@ -50,9 +50,6 @@ export function Home() {
         keyExtractor={(item: any) => String(item)}
         renderItem={({ item }) => <CarCard onPress={handleCarDetails} {...carData} />}
       />
-
-
-
     </S.Container>
   )
 }
