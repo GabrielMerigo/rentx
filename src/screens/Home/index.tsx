@@ -1,12 +1,19 @@
 import React from "react";
 import { StatusBar } from "react-native";
 import Logo from '../../assets/logo.svg'
-import { RFValue  } from 'react-native-responsive-fontsize'
+import { RFValue } from 'react-native-responsive-fontsize'
 
 import * as S from './styles';
 import { CarCard } from "../../components/CarCard";
+import { useNavigation } from "@react-navigation/native";
 
-export function Home(){
+export function Home() {
+  const { navigate } = useNavigation();
+
+  function handleCarDetails() {
+    navigate('CarDetails' as any);
+  }
+
   const carData = {
     brand: 'Audi',
     name: 'Audi TT',
@@ -19,15 +26,15 @@ export function Home(){
 
   return (
     <S.Container>
-      <StatusBar 
+      <StatusBar
         barStyle="light-content"
         translucent
         backgroundColor='transparent'
-       />
+      />
 
       <S.Header>
         <S.HeaderContent>
-          <Logo 
+          <Logo
             width={RFValue(108)}
             height={RFValue(12)}
           />
@@ -38,12 +45,12 @@ export function Home(){
         </S.HeaderContent>
       </S.Header>
 
-      <S.CarList 
+      <S.CarList
         data={[1, 3, 4, 0, 6, 7, 9]}
-        keyExtractor={item => String(item)}
-        renderItem={({ item }) => <CarCard {...carData} />}
+        keyExtractor={(item: any) => String(item)}
+        renderItem={({ item }) => <CarCard onPress={handleCarDetails} {...carData} />}
       />
-      
+
 
 
     </S.Container>

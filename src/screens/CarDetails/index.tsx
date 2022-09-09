@@ -11,8 +11,16 @@ import GasolineSvg from '../../assets/gasoline.svg';
 import ExchangeSvg from '../../assets/exchange.svg';
 import PeopleSvg from '../../assets/people.svg';
 import { Button } from '../../components/Button'
+import { useNavigation } from '@react-navigation/native'
 
 export function CarDetails() {
+  const { navigate } = useNavigation();
+
+  function handleConfirmRental() {
+    navigate('Scheduling');
+  }
+
+
   return (
     <S.Container>
       <S.Header>
@@ -55,7 +63,7 @@ export function CarDetails() {
       </S.Content>
 
       <S.Footer>
-        <Button color="red" title="Confirmar" />
+        <Button color="red" title="Choose Rental Period " onPress={handleConfirmRental} />
       </S.Footer>
     </S.Container>
   )

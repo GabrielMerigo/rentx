@@ -1,5 +1,6 @@
 import * as S from './styles';
 import GasolineSvg from '../../assets/gasoline.svg'
+import { TouchableOpacityProps } from 'react-native';
 
 type CarCardProps = {
   brand: string;
@@ -9,11 +10,11 @@ type CarCardProps = {
     price: number;
   },
   thumbnail: string;
-}
+} & TouchableOpacityProps
 
-export function CarCard({ brand, name, rent, thumbnail }: CarCardProps) {
+export function CarCard({ brand, name, rent, thumbnail, ...rest }: CarCardProps) {
   return (
-    <S.Container>
+    <S.Container {...rest}>
       <S.Details>
         <S.Brand>{brand}</S.Brand>
         <S.Name>{name}</S.Name>
