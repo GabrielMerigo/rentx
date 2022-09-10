@@ -10,7 +10,7 @@ type CarCardProps = {
     price: number;
   },
   thumbnail: string;
-} & TouchableOpacityProps
+} & TouchableOpacityProps;
 
 export function CarCard({ brand, name, rent, thumbnail, ...rest }: CarCardProps) {
   return (

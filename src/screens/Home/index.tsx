@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StatusBar } from "react-native";
 import Logo from '../../assets/logo.svg'
 import { RFValue } from 'react-native-responsive-fontsize'
@@ -6,22 +6,45 @@ import { RFValue } from 'react-native-responsive-fontsize'
 import * as S from './styles';
 import { CarCard } from "../../components/CarCard";
 import { useNavigation } from "@react-navigation/native";
+import api from '../../services/api';
+import { useQuery } from "react-query";
+import Loader from "../../components/Load";
+
+
+type AccessoryType = {
+  name: string,
+  type: string,
+}
+
+type CarsType = {
+  about: string
+  accessories: AccessoryType[],
+  brand: string,
+  fuel_type: string,
+  id: string,
+  name: string,
+  photos: String[],
+  rent: {
+    period: string,
+    price: number,
+  },
+  thumbnail: string,
+}
+
+type ItemList = {
+  item: CarsType
+}
 
 export function Home() {
   const { navigate } = useNavigation();
 
+  const { data: cars, isLoading } = useQuery<CarsType[]>('cars', async () => {
+    const response = await api.get('/cars');
+    return response.data;
+  });
+
   function handleCarDetails() {
     navigate('CarDetails' as never, {} as never);
-  }
-
-  const carData = {
-    brand: 'Audi',
-    name: 'Audi TT',
-    rent: {
-      period: '1 week',
-      price: 15000
-    },
-    thumbnail: 'https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png'
   }
 
   return (
@@ -45,11 +68,16 @@ export function Home() {
         </S.HeaderContent>
       </S.Header>
 
-      <S.CarList
-        data={[1, 3, 4, 0, 6, 7, 9]}
-        keyExtractor={(item: any) => String(item)}
-        renderItem={({ item }) => <CarCard onPress={handleCarDetails} {...carData} />}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <S.CarList
+          data={cars}
+          keyExtractor={(item: CarsType) => String(item.id)}
+          renderItem={({ item }: ItemList) => <CarCard onPress={handleCarDetails} {...item} />}
+        />
+      )}
+
     </S.Container>
   )
 }

@@ -14,13 +14,12 @@ import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import theme from '../../styles/theme'
 
-export function CarDetails() {
+export function CarDetails({ }) {
   const { navigate, goBack } = useNavigation();
 
   function handleConfirmRental() {
     navigate('Scheduling' as never, {} as never);
   }
-
 
   return (
     <S.Container>
