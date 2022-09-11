@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import { Acessory } from '../../components/Acessory'
+import { Accessory } from '../../components/Accessory'
 import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import * as S from './styles'
@@ -51,12 +51,12 @@ export function SchedulingDetails() {
         </S.Details>
 
         <S.Acessories>
-          <Acessory name="380km/h" icon={SpeedSvg} />
-          <Acessory name="3.2s" icon={AccelerationSVG} />
-          <Acessory name="800 HP" icon={ForceSvg} />
-          <Acessory name="Gasoline" icon={GasolineSvg} />
-          <Acessory name="Auto" icon={ExchangeSvg} />
-          <Acessory name="2 people" icon={PeopleSvg} />
+          <Accessory name="380km/h" icon={SpeedSvg} />
+          <Accessory name="3.2s" icon={AccelerationSVG} />
+          <Accessory name="800 HP" icon={ForceSvg} />
+          <Accessory name="Gasoline" icon={GasolineSvg} />
+          <Accessory name="Auto" icon={ExchangeSvg} />
+          <Accessory name="2 people" icon={PeopleSvg} />
         </S.Acessories>
 
         <S.RentalPeriod>

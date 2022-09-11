@@ -8,8 +8,7 @@ type AcessoryProps = {
   icon: React.FC<SvgProps>;
 }
 
-export function Acessory({ name, icon: Icon }: AcessoryProps) {
-
+export function Accessory({ name, icon: Icon }: AcessoryProps) {
   return (
     <S.Container>
       <Icon width={32} height={32} />

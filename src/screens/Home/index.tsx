@@ -16,14 +16,14 @@ type AccessoryType = {
   type: string,
 }
 
-type CarsType = {
+export type CarsType = {
   about: string
   accessories: AccessoryType[],
   brand: string,
   fuel_type: string,
   id: string,
   name: string,
-  photos: String[],
+  photos: string[],
   rent: {
     period: string,
     price: number,
@@ -43,8 +43,8 @@ export function Home() {
     return response.data;
   });
 
-  function handleCarDetails() {
-    navigate('CarDetails' as never, {} as never);
+  function handleCarDetails(car: CarsType) {
+    navigate('CarDetails' as never, { car } as never);
   }
 
   return (
@@ -74,7 +74,7 @@ export function Home() {
         <S.CarList
           data={cars}
           keyExtractor={(item: CarsType) => String(item.id)}
-          renderItem={({ item }: ItemList) => <CarCard onPress={handleCarDetails} {...item} />}
+          renderItem={({ item }: ItemList) => <CarCard onPress={() => handleCarDetails(item)} {...item} />}
         />
       )}
 

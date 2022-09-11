@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import { Acessory } from '../../components/Acessory'
+import { Accessory } from '../../components/Accessory'
 import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import * as S from './styles'
@@ -11,15 +11,37 @@ import GasolineSvg from '../../assets/gasoline.svg';
 import ExchangeSvg from '../../assets/exchange.svg';
 import PeopleSvg from '../../assets/people.svg';
 import { Button } from '../../components/Button'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import theme from '../../styles/theme'
+import { CarsType } from '../Home'
+
+type RouteParams = {
+  car: CarsType;
+}
 
 export function CarDetails({ }) {
   const { navigate, goBack } = useNavigation();
+  const route = useRoute();
+  const { car } = route.params as RouteParams;
 
   function handleConfirmRental() {
     navigate('Scheduling' as never, {} as never);
   }
+
+  const getIcon = (icon: string) => {
+    let iconSvg = {
+      'speed': AccelerationSVG,
+      'acceleration': AccelerationSVG,
+      'turning_dia_meter': ForceSvg,
+      'gasoline_motor': GasolineSvg,
+      'exchange': ExchangeSvg,
+      'seats': PeopleSvg
+    }[icon];
+
+    return iconSvg;
+  }
+
+
 
   return (
     <S.Container>
@@ -29,36 +51,34 @@ export function CarDetails({ }) {
 
       <S.CarImages>
         <ImageSlider
-          imagesUrl={['https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png']}
+          imagesUrl={car.photos}
         />
       </S.CarImages>
 
       <S.Content>
         <S.Details>
           <S.Description>
-            <S.Brand>Lamborghini</S.Brand>
-            <S.Name>Huracan</S.Name>
+            <S.Brand>{car.brand}</S.Brand>
+            <S.Name>{car.name}</S.Name>
           </S.Description>
 
           <S.Rent>
-            <S.Period>Per day</S.Period>
-            <S.Price>$ 100</S.Price>
+            <S.Period>{car.rent.period}</S.Period>
+            <S.Price>$ {car.rent.price}</S.Price>
           </S.Rent>
         </S.Details>
 
-        <S.Acessories>
-          <Acessory name="380km/h" icon={SpeedSvg} />
-          <Acessory name="3.2s" icon={AccelerationSVG} />
-          <Acessory name="800 HP" icon={ForceSvg} />
-          <Acessory name="Gasoline" icon={GasolineSvg} />
-          <Acessory name="Auto" icon={ExchangeSvg} />
-          <Acessory name="2 people" icon={PeopleSvg} />
-        </S.Acessories>
+        <S.Accessories>
+          {car.accessories.map(acessory => (
+            <Accessory
+              name={acessory.name}
+              icon={AccelerationSVG}
+            />
+          ))}
+        </S.Accessories>
 
         <S.About>
-          Este é automóvel desportivo.
-          Surgiu do lendário touro de lide indultado na praça Real Maestranza de Sevilla.
-          É um belíssimo carro para quem gosta de acelerar.
+          {car.about}
         </S.About>
       </S.Content>
 
