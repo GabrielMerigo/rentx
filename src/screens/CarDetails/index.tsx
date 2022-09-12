@@ -4,16 +4,11 @@ import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import * as S from './styles'
 
-import SpeedSvg from '../../assets/speed.svg';
-import AccelerationSVG from '../../assets/acceleration.svg';
-import ForceSvg from '../../assets/force.svg';
-import GasolineSvg from '../../assets/gasoline.svg';
-import ExchangeSvg from '../../assets/exchange.svg';
-import PeopleSvg from '../../assets/people.svg';
 import { Button } from '../../components/Button'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import theme from '../../styles/theme'
 import { CarsType } from '../Home'
+import { getAccessoryIcon } from '../../utils/getAccessory'
 
 type RouteParams = {
   car: CarsType;
@@ -27,21 +22,6 @@ export function CarDetails({ }) {
   function handleConfirmRental() {
     navigate('Scheduling' as never, {} as never);
   }
-
-  const getIcon = (icon: string) => {
-    let iconSvg = {
-      'speed': AccelerationSVG,
-      'acceleration': AccelerationSVG,
-      'turning_dia_meter': ForceSvg,
-      'gasoline_motor': GasolineSvg,
-      'exchange': ExchangeSvg,
-      'seats': PeopleSvg
-    }[icon];
-
-    return iconSvg;
-  }
-
-
 
   return (
     <S.Container>
@@ -72,7 +52,7 @@ export function CarDetails({ }) {
           {car.accessories.map(acessory => (
             <Accessory
               name={acessory.name}
-              icon={AccelerationSVG}
+              icon={getAccessoryIcon(acessory.type)}
             />
           ))}
         </S.Accessories>

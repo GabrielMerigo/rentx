@@ -38,7 +38,7 @@ type ItemList = {
 export function Home() {
   const { navigate } = useNavigation();
 
-  const { data: cars, isLoading } = useQuery<CarsType[]>('cars', async () => {
+  const { data: cars, isLoading, isSuccess } = useQuery<CarsType[]>('cars', async () => {
     const response = await api.get('/cars');
     return response.data;
   });
@@ -63,7 +63,7 @@ export function Home() {
           />
 
           <S.TotalCars>
-            Total of 12 cars
+            Total of {cars?.length} cars
           </S.TotalCars>
         </S.HeaderContent>
       </S.Header>

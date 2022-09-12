@@ -1,6 +1,7 @@
 import * as S from './styles';
 import GasolineSvg from '../../assets/gasoline.svg'
 import { TouchableOpacityProps } from 'react-native';
+import { getAccessoryIcon } from '../../utils/getAccessory';
 
 type CarCardProps = {
   brand: string;
@@ -10,9 +11,12 @@ type CarCardProps = {
     price: number;
   },
   thumbnail: string;
+  fuel_type: string;
 } & TouchableOpacityProps;
 
-export function CarCard({ brand, name, rent, thumbnail, ...rest }: CarCardProps) {
+export function CarCard({ brand, name, rent, thumbnail, fuel_type, ...rest }: CarCardProps) {
+  const MotorIcon = getAccessoryIcon(fuel_type);
+
   return (
     <S.Container {...rest}>
       <S.Details>
@@ -26,7 +30,7 @@ export function CarCard({ brand, name, rent, thumbnail, ...rest }: CarCardProps)
           </S.Rent>
 
           <S.Type>
-            <GasolineSvg />
+            <MotorIcon />
           </S.Type>
         </S.About>
 

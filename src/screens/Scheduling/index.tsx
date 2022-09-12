@@ -5,15 +5,31 @@ import * as S from './styles';
 import ArrowSvg from '../../assets/arrow.svg';
 import { StatusBar } from "react-native";
 import { Button } from '../../components/Button';
-import { Calendar } from '../../components/Calendar';
+import { Calendar, DayProps, generateInterval, MarkedDateProps } from '../../components/Calendar';
 import { useNavigation } from '@react-navigation/native';
-
+import { useState } from 'react';
 
 export function Scheduling() {
+  const [lastData, setLastData] = useState<DayProps>({} as DayProps);
+  const [markedDates, setMarkedDates] = useState<MarkedDateProps>({} as MarkedDateProps);
   const { navigate, goBack } = useNavigation();
 
   function handleConfirmRental() {
     navigate('SchedulingDetails' as never, {} as never);
+  }
+
+  function handleChangeDate(date: DayProps) {
+    let start = !lastData.timestamp ? date : lastData;
+    let end = date;
+
+    if (start.timestamp > end.timestamp) {
+      start = end;
+      end = start;
+    }
+
+    setLastData(end);
+    const interval = generateInterval(start, end);
+    setMarkedDates(interval);
   }
 
 
@@ -50,7 +66,10 @@ export function Scheduling() {
       </S.Header>
 
       <S.Content>
-        <Calendar />
+        <Calendar
+          markedDates={markedDates}
+          onDayPress={handleChangeDate as any}
+        />
       </S.Content>
 
       <S.Footer>

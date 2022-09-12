@@ -5,7 +5,7 @@ import * as S from './styles';
 
 type AcessoryProps = {
   name: string;
-  icon: React.FC<SvgProps>;
+  icon: any;
 }
 
 export function Accessory({ name, icon: Icon }: AcessoryProps) {

@@ -1,11 +1,32 @@
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
 
-import { Calendar as CustomCalendar } from 'react-native-calendars';
-// import * as S from './styles';
+import { Calendar as CustomCalendar, DateData } from 'react-native-calendars';
 import { useTheme } from 'styled-components';
+import { generateInterval } from './generateInterval'
 
-export function Calendar() {
+type MarkedDateProps = {
+  [date: string]: {
+    color: string;
+    textColor: string;
+    disabled?: boolean;
+    disableTouchEvent?: boolean;
+  }
+}
+
+type CalendarProps = {
+  markedDates: MarkedDateProps;
+  onDayPress: (date: DateData) => void;
+}
+
+type DayProps = {
+  dateString: string;
+  dayNumber: number;
+  month: number;
+  timestamp: string;
+}
+
+function Calendar({ markedDates, onDayPress }: CalendarProps) {
   const theme = useTheme();
 
   return (
@@ -39,6 +60,16 @@ export function Calendar() {
       }}
       minDate={String(new Date())}
       firstDay={1}
+      markingType="period"
+      markedDates={markedDates}
+      onDayPress={onDayPress}
     />
   );
 }
+
+export {
+  Calendar,
+  generateInterval
+};
+
+export type { DayProps, MarkedDateProps };
