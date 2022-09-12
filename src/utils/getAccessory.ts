@@ -8,7 +8,6 @@ import EletricMotor from '../assets/energy.svg';
 import HybridMotor from '../assets/hybrid.svg';
 
 export const getAccessoryIcon = (type: string) => {
-  console.log(type)
   switch(type){
     case 'speed':
       return SpeedSvg;

@@ -14,16 +14,39 @@ import { Button } from '../../components/Button'
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useTheme } from 'styled-components'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { getAccessoryIcon } from '../../utils/getAccessory';
+import { CarsType } from '../Home'
+import api from '../../services/api'
+import { Alert } from 'react-native'
+
+export type RouteParams = {
+  car: CarsType;
+  dates: any;
+}
 
 export function SchedulingDetails() {
   const theme = useTheme();
   const { navigate, goBack } = useNavigation();
 
-  function handleConfirmRental() {
-    navigate('SchedulingComplete' as never, {} as never);
-  }
+  const route = useRoute();
+  const { car, dates } = route.params as RouteParams;
+  const rentTotal = Number(dates.length * car.rent.price);
 
+  async function handleConfirmRental() {
+    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+    const unavailable_dates = [
+      ...schedulesByCar.data.unavailable_dates,
+      ...dates
+    ];
+
+    api.put(`/schedules_bycars/${car.id}`, {
+      id: car.id,
+      unavailable_dates
+    })
+      .then(() => navigate('SchedulingComplete' as never, {} as never))
+      .catch(() => Alert.alert('Não foi possivel realizar essa operação...'))
+  }
 
   return (
     <S.Container>
@@ -33,31 +56,33 @@ export function SchedulingDetails() {
 
       <S.CarImages>
         <ImageSlider
-          imagesUrl={['https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png']}
+          imagesUrl={car.photos}
         />
       </S.CarImages>
 
       <S.Content>
         <S.Details>
           <S.Description>
-            <S.Brand>Lamborghini</S.Brand>
-            <S.Name>Huracan</S.Name>
+            <S.Brand>{car.brand}</S.Brand>
+            <S.Name>{car.name}</S.Name>
           </S.Description>
 
           <S.Rent>
-            <S.Period>Per day</S.Period>
-            <S.Price>$ 100</S.Price>
+            <S.Period>{car.rent.period}</S.Period>
+            <S.Price>$ {car.rent.price}</S.Price>
           </S.Rent>
         </S.Details>
 
-        <S.Acessories>
-          <Accessory name="380km/h" icon={SpeedSvg} />
-          <Accessory name="3.2s" icon={AccelerationSVG} />
-          <Accessory name="800 HP" icon={ForceSvg} />
-          <Accessory name="Gasoline" icon={GasolineSvg} />
-          <Accessory name="Auto" icon={ExchangeSvg} />
-          <Accessory name="2 people" icon={PeopleSvg} />
-        </S.Acessories>
+        <S.Accessories>
+          {car.accessories.map(accessory => (
+            <Accessory
+              key={accessory.type}
+              name={accessory.name}
+              icon={getAccessoryIcon(accessory.type)}
+            />
+          ))}
+
+        </S.Accessories>
 
         <S.RentalPeriod>
           <S.CalendarIcon>
@@ -70,7 +95,7 @@ export function SchedulingDetails() {
 
           <S.DateInfo>
             <S.DateTitle>DE</S.DateTitle>
-            <S.DateValue>18/06/2021</S.DateValue>
+            <S.DateValue>{dates[0]}</S.DateValue>
           </S.DateInfo>
 
           <Feather
@@ -81,15 +106,15 @@ export function SchedulingDetails() {
 
           <S.DateInfo>
             <S.DateTitle>DE</S.DateTitle>
-            <S.DateValue>18/06/2021</S.DateValue>
+            <S.DateValue>{dates[1]}</S.DateValue>
           </S.DateInfo>
         </S.RentalPeriod>
 
         <S.RentalPrice>
           <S.RentalPriceLabel>TOTAL</S.RentalPriceLabel>
           <S.RentalPriceDetails>
-            <S.RentalPriceQuota>$ 90 x3 daily</S.RentalPriceQuota>
-            <S.RentalPriceTotal>$ 260</S.RentalPriceTotal>
+            <S.RentalPriceQuota>{`$ ${car.rent.price} x${dates.length} daily`}</S.RentalPriceQuota>
+            <S.RentalPriceTotal>$ {rentTotal}</S.RentalPriceTotal>
           </S.RentalPriceDetails>
         </S.RentalPrice>
 

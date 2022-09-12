@@ -10,7 +10,7 @@ import theme from '../../styles/theme'
 import { CarsType } from '../Home'
 import { getAccessoryIcon } from '../../utils/getAccessory'
 
-type RouteParams = {
+export type RouteParams = {
   car: CarsType;
 }
 
@@ -20,7 +20,9 @@ export function CarDetails({ }) {
   const { car } = route.params as RouteParams;
 
   function handleConfirmRental() {
-    navigate('Scheduling' as never, {} as never);
+    navigate('Scheduling' as never, {
+      car
+    } as never);
   }
 
   return (
@@ -51,6 +53,7 @@ export function CarDetails({ }) {
         <S.Accessories>
           {car.accessories.map(acessory => (
             <Accessory
+              key={acessory.type}
               name={acessory.name}
               icon={getAccessoryIcon(acessory.type)}
             />
