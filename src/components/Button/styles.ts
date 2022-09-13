@@ -1,9 +1,10 @@
+import { TouchableOpacityProps } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import styled, { css } from "styled-components/native";
 
 type ContainerProps = {
   color: string;
-}
+} & TouchableOpacityProps;
 
 export const Container = styled.TouchableOpacity<ContainerProps>`
   ${({ theme, color }) => css`

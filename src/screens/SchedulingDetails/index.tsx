@@ -13,6 +13,9 @@ import { getAccessoryIcon } from '../../utils/getAccessory';
 import { CarsType } from '../Home'
 import api from '../../services/api'
 import { Alert } from 'react-native'
+import { format } from 'date-fns'
+import { getPlatformDate } from '../../utils/getPlatformDate'
+import { useState } from 'react'
 
 export type RouteParams = {
   car: CarsType;
@@ -22,12 +25,14 @@ export type RouteParams = {
 export function SchedulingDetails() {
   const theme = useTheme();
   const { navigate, goBack } = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   const route = useRoute();
   const { car, dates } = route.params as RouteParams;
   const rentTotal = Number(dates.length * car.rent.price);
 
   async function handleConfirmRental() {
+    setLoading(true);
     const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
     const unavailable_dates = [
       ...schedulesByCar.data.unavailable_dates,
@@ -36,7 +41,9 @@ export function SchedulingDetails() {
 
     await api.post('/schedules_byuser', {
       user_id: 1,
-      car
+      car,
+      startDate: dates[0],
+      endDate: dates[dates.length - 1],
     });
 
     try {
@@ -50,7 +57,7 @@ export function SchedulingDetails() {
       Alert.alert('Não foi possivel realizar essa operação...');
     }
 
-
+    setLoading(false);
   }
 
   return (
@@ -99,7 +106,7 @@ export function SchedulingDetails() {
           </S.CalendarIcon>
 
           <S.DateInfo>
-            <S.DateTitle>DE</S.DateTitle>
+            <S.DateTitle>From the</S.DateTitle>
             <S.DateValue>{dates[0]}</S.DateValue>
           </S.DateInfo>
 
@@ -110,7 +117,7 @@ export function SchedulingDetails() {
           />
 
           <S.DateInfo>
-            <S.DateTitle>DE</S.DateTitle>
+            <S.DateTitle>to the</S.DateTitle>
             <S.DateValue>{dates[1]}</S.DateValue>
           </S.DateInfo>
         </S.RentalPeriod>
@@ -127,7 +134,13 @@ export function SchedulingDetails() {
       </S.Content>
 
       <S.Footer>
-        <Button color={theme.colors.success} title="Rent Now" onPress={handleConfirmRental} />
+        <Button
+          disabled={loading}
+          loading={loading}
+          color={theme.colors.success}
+          title="Rent Now"
+          onPress={handleConfirmRental}
+        />
       </S.Footer>
     </S.Container>
   )

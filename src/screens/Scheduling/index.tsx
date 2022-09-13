@@ -71,14 +71,13 @@ export function Scheduling() {
         <BackButton onPress={() => goBack()} color={theme.colors.background_secondary} />
 
         <S.Title>
-          Escolha uma {'\n'}
-          data de início e {'\n'}
-          fim do aluguel
+          Choose a rental {'\n'}
+          start and end date {'\n'}
         </S.Title>
 
         <S.RentalPeriod>
           <S.DateInfo>
-            <S.DateTitle>DE</S.DateTitle>
+            <S.DateTitle>FROM THE</S.DateTitle>
             <S.DateValue selected={!!rentalPeriod.endFormatted}>
               {rentalPeriod.startFormatted}
             </S.DateValue>
@@ -87,7 +86,7 @@ export function Scheduling() {
           <ArrowSvg />
 
           <S.DateInfo>
-            <S.DateTitle>ATÉ</S.DateTitle>
+            <S.DateTitle>TO THE</S.DateTitle>
             <S.DateValue selected={!!rentalPeriod.endFormatted}>
               {rentalPeriod.endFormatted}
             </S.DateValue>
@@ -103,7 +102,7 @@ export function Scheduling() {
       </S.Content>
 
       <S.Footer>
-        <Button title="Confirm" onPress={handleConfirmRental} />
+        <Button disabled={!rentalPeriod.startFormatted} title="Confirm" onPress={handleConfirmRental} />
       </S.Footer>
 
     </S.Container>
