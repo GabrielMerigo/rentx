@@ -9,6 +9,8 @@ import { useNavigation } from "@react-navigation/native";
 import api from '../../services/api';
 import { useQuery } from "react-query";
 import Loader from "../../components/Load";
+import { Ionicons } from "@expo/vector-icons";
+import theme from "../../styles/theme";
 
 
 type AccessoryType = {
@@ -38,13 +40,17 @@ type ItemList = {
 export function Home() {
   const { navigate } = useNavigation();
 
-  const { data: cars, isLoading, isSuccess } = useQuery<CarsType[]>('cars', async () => {
+  const { data: cars, isLoading } = useQuery<CarsType[]>('cars', async () => {
     const response = await api.get('/cars');
     return response.data;
   });
 
   function handleCarDetails(car: CarsType) {
     navigate('CarDetails' as never, { car } as never);
+  }
+
+  function handleOpenMyCars() {
+    navigate('MyCars' as never);
   }
 
   return (
@@ -77,6 +83,14 @@ export function Home() {
           renderItem={({ item }: ItemList) => <CarCard onPress={() => handleCarDetails(item)} {...item} />}
         />
       )}
+
+      <S.MyCarsButton onPress={handleOpenMyCars}>
+        <Ionicons
+          name="ios-car-sport"
+          size={38}
+          color={theme.colors.shape}
+        />
+      </S.MyCarsButton>
 
     </S.Container>
   )

@@ -10,6 +10,7 @@ import { SchedulingDetails } from './screens/SchedulingDetails'
 import { SchedulingComplete } from './screens/SchedulingComplete'
 
 import { NavigationContainer } from '@react-navigation/native'
+import { MyCars } from "./screens/MyCars";
 
 export function Routes() {
   return (
@@ -34,6 +35,10 @@ export function Routes() {
         <Screen
           name="SchedulingComplete"
           component={SchedulingComplete}
+        />
+        <Screen
+          name="MyCars"
+          component={MyCars}
         />
       </Navigator>
     </NavigationContainer>

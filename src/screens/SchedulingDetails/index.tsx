@@ -4,12 +4,6 @@ import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import * as S from './styles'
 
-import SpeedSvg from '../../assets/speed.svg';
-import AccelerationSVG from '../../assets/acceleration.svg';
-import ForceSvg from '../../assets/force.svg';
-import GasolineSvg from '../../assets/gasoline.svg';
-import ExchangeSvg from '../../assets/exchange.svg';
-import PeopleSvg from '../../assets/people.svg';
 import { Button } from '../../components/Button'
 import { Feather } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize'
@@ -40,12 +34,23 @@ export function SchedulingDetails() {
       ...dates
     ];
 
-    api.put(`/schedules_bycars/${car.id}`, {
-      id: car.id,
-      unavailable_dates
-    })
-      .then(() => navigate('SchedulingComplete' as never, {} as never))
-      .catch(() => Alert.alert('Não foi possivel realizar essa operação...'))
+    await api.post('/schedules_byuser', {
+      user_id: 1,
+      car
+    });
+
+    try {
+      await api.put(`/schedules_bycars/${car.id}`, {
+        id: car.id,
+        unavailable_dates
+      })
+
+      navigate('SchedulingComplete' as never, {} as never);
+    } catch (err) {
+      Alert.alert('Não foi possivel realizar essa operação...');
+    }
+
+
   }
 
   return (
