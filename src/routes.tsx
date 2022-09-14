@@ -11,11 +11,25 @@ import { SchedulingComplete } from './screens/SchedulingComplete'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { MyCars } from "./screens/MyCars";
+import { Splash } from "./screens/Splash";
 
 export function Routes() {
+  const config = {
+    screens: {
+      Home: {
+        initialRouteName: 'Splash',
+      },
+    },
+  };
+
+
   return (
     <NavigationContainer>
-      <Navigator screenOptions={{ headerShown: false }}>
+      <Navigator {...config} screenOptions={{ headerShown: false }}>
+        <Screen
+          name="Splash"
+          component={Splash}
+        />
         <Screen
           name="Home"
           component={Home}
