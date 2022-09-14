@@ -5,8 +5,9 @@ export const Container = styled.View`
   ${({ theme }) => css`
     flex: 1;
     justify-content: center;
-    /* align-items: center; */
+    align-items: center;
 
     background-color: ${theme.colors.header};
+    align-items: center;
   `}
 `;

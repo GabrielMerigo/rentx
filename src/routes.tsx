@@ -19,9 +19,8 @@ export function Routes() {
       Home: {
         initialRouteName: 'Splash',
       },
-    },
+    }
   };
-
 
   return (
     <NavigationContainer>
