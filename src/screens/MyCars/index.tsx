@@ -29,8 +29,6 @@ export function MyCars() {
     return response.data;
   });
 
-  console.log(cars)
-
   return (
     <S.Container>
       <S.Header>
