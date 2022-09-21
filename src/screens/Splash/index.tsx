@@ -50,7 +50,7 @@ export function Splash() {
         runOnJS(startApp)();
       }
     )
-  }, [])
+  }, []);
 
   return (
     <S.Container>
