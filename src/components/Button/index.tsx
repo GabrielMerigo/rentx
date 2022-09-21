@@ -8,16 +8,28 @@ type ButtonProps = {
   color?: string;
   disabled?: boolean;
   loading?: boolean;
+  light?: boolean;
 } & TouchableOpacityProps
 
-export function Button({ title, color, loading, disabled = false, ...rest }: ButtonProps) {
+export function Button({ 
+  title, 
+  color, 
+  loading, 
+  light, 
+  disabled = false, 
+  ...rest 
+}: ButtonProps) {
   return (
-    <S.Container {...rest} disabled={disabled} color={color} style={{ opacity: (disabled === true || loading === true) ? 0.5 : 1 }}>
-      {loading
-        ? <ActivityIndicator color={theme.colors.shape} />
-        : <S.Title>{title}</S.Title>
-      }
-
+    <S.Container 
+      {...rest}
+      disabled={disabled} 
+      color={color} 
+      style={{ opacity: (disabled === true || loading === true) ? 0.5 : 1 }}
+    >
+    {loading
+      ? <ActivityIndicator color={theme.colors.shape} />
+      : <S.Title light={light}>{title}</S.Title>
+    }
 
     </S.Container>
   )

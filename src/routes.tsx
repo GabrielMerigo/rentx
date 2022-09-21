@@ -8,17 +8,18 @@ import { Scheduling } from './screens/Scheduling'
 import { CarDetails } from './screens/CarDetails'
 import { SchedulingDetails } from './screens/SchedulingDetails'
 import { SchedulingComplete } from './screens/SchedulingComplete'
-
 import { NavigationContainer } from '@react-navigation/native'
 import { MyCars } from "./screens/MyCars";
 import { Splash } from "./screens/Splash";
+import { SignIn } from "./screens/SignIn";
+
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export function Routes() {
   const config = {
     screens: {
       Home: {
-        initialRouteName: 'Splash',
+        initialRouteName: 'SignIn',
       },
     }
   };
@@ -28,8 +29,8 @@ export function Routes() {
       <NavigationContainer>
         <Navigator {...config} screenOptions={{ headerShown: false }}>
           <Screen
-            name="Splash"
-            component={Splash}
+            name="SignIn"
+            component={SignIn}
           />
           <Screen
             name="Home"

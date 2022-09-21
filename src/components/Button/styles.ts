@@ -1,10 +1,17 @@
 import { TouchableOpacityProps } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
-import styled, { css } from "styled-components/native";
+import styled, { css, DefaultTheme } from "styled-components/native";
 
 type ContainerProps = {
   color: string;
+  light: boolean;
 } & TouchableOpacityProps;
+
+const wrapperModifiers = {
+  light: (theme: DefaultTheme) => css`
+    color: ${theme.colors.header};
+  `,
+}
 
 export const Container = styled.TouchableOpacity<ContainerProps>`
   ${({ theme, color }) => css`
@@ -18,10 +25,12 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
   `}
 `;
 
-export const Title = styled.Text`
-  ${({ theme  }) => css`
+export const Title = styled.Text<Pick<ContainerProps, 'light'>>`
+  ${({ theme, light }) => css`
     font-family: ${theme.fonts.primary_500};
     font-size: ${RFValue(15)}px;
     color: ${theme.colors.shape};
+
+    ${light && wrapperModifiers.light(theme)}
   `}
 `;

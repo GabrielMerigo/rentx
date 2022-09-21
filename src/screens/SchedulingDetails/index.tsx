@@ -13,8 +13,6 @@ import { getAccessoryIcon } from '../../utils/getAccessory';
 import { CarsType } from '../Home'
 import api from '../../services/api'
 import { Alert } from 'react-native'
-import { format } from 'date-fns'
-import { getPlatformDate } from '../../utils/getPlatformDate'
 import { useState } from 'react'
 
 export type RouteParams = {
