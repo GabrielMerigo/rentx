@@ -12,9 +12,9 @@ type InputProps = {
   iconName: React.ComponentProps<typeof Feather>['name']
   isPassword?: boolean;
   isPasswordVisible?: boolean;
-  setIsPasswordVisible?: React.Dispatch<React.SetStateAction<boolean>>
+  setIsPasswordVisible?: React.Dispatch<React.SetStateAction<boolean>>;
   rules: {
-    required: string
+    required: string;
   }
 } & TextInputProps
 
@@ -28,28 +28,48 @@ function Input({
   setIsPasswordVisible,
   ...rest 
 }: InputProps){
-
+  const [isFocus, setIsFocus] = useState(false);
   function handlePasswordVisibilityChange(){
     setIsPasswordVisible!(!isPasswordVisible);
   }
-
 
   return (
     <Controller
       name={name}
       control={control}
-      rules={rules}
+      rules={{
+        required: true
+      }}
       render={({ field: { value, onChange } }) => (
         <S.Wrapper>
-          <S.IconContainer>
-            <Feather name={iconName} size={24} color={theme.colors.text_detail} />
+          <S.IconContainer isFocus={isFocus} value={value}>
+            <Feather 
+              name={iconName} 
+              size={24} 
+              color={value?.length > 3 || isFocus ? theme.colors.main : theme.colors.text_detail} 
+            />
           </S.IconContainer>
-          <S.Container value={value} onChangeText={onChange} {...rest} />
-          {isPassword && <BorderlessButton onPress={handlePasswordVisibilityChange}>
-            <S.IconContainer>
-              <Feather name={isPasswordVisible ? 'eye' : 'eye-off'} size={24} color={theme.colors.text_detail} />
-            </S.IconContainer>
-            </BorderlessButton> 
+          <S.Input
+            isFocus={isFocus}
+            value={value} 
+            onChangeText={(e: any) => {
+              onChange(e)
+            }}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            {...rest}
+          />
+          {isPassword && (
+              <BorderlessButton onPress={handlePasswordVisibilityChange}>
+                <S.IconContainer isFocus={isFocus}>
+                  <Feather
+                    name={isPasswordVisible ? 'eye' : 'eye-off'} 
+                    size={24} 
+                    color={theme.colors.text_detail}
+                  />
+                </S.IconContainer>
+              </BorderlessButton>
+            )
           }
         </S.Wrapper>
       )}
