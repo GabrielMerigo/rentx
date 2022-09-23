@@ -1,5 +1,5 @@
 import { StatusBar } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from '../../components/Button';
 
@@ -15,6 +15,7 @@ export type FormDataSignIn = {
 
 export function SignIn(){
   const { control, handleSubmit } = useForm();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
   return (
     <S.Container>
@@ -22,24 +23,6 @@ export function SignIn(){
         barStyle="dark-content"
         backgroundColor="transparent"
         translucent
-      />
-
-      <Input 
-        placeholder="E-mail" 
-        name="email" 
-        control={control} 
-        rules={{
-          required: "Email Required"
-        }} 
-      />
-      <Input 
-        placeholder="Password" 
-        name="password" 
-        control={control} 
-        secureTextEntry
-        rules={{
-          required: "Email Required"
-        }} 
       />
 
       <S.Header>
@@ -51,6 +34,37 @@ export function SignIn(){
           uma experiência incrível.
         </S.Subtitle>
       </S.Header>
+
+      <S.Form>
+        <Input
+          autoCorrect={false}
+          autoCapitalize="none"
+          iconName="mail"
+          placeholder="E-mail" 
+          name="email" 
+          control={control} 
+          rules={{
+            required: "Email Required"
+          }} 
+        />
+        
+        <Input
+          isPasswordVisible={isPasswordVisible}
+          setIsPasswordVisible={setIsPasswordVisible}
+          isPassword
+          autoCorrect={false}
+          autoCapitalize="none"
+          iconName="lock"
+          placeholder="Password" 
+          name="password" 
+          control={control} 
+          secureTextEntry={!!isPasswordVisible}
+          rules={{
+            required: "Email Required"
+          }} 
+        />
+      </S.Form>
+
       <S.Footer>
         <Button 
           title="Login"

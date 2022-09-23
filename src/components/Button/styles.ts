@@ -22,6 +22,7 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
     justify-content: center;
 
     background-color: ${color ? color : theme.colors.main};
+    margin-top: 8px;
   `}
 `;
 
