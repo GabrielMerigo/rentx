@@ -13,15 +13,11 @@ type InputProps = {
   isPassword?: boolean;
   isPasswordVisible?: boolean;
   setIsPasswordVisible?: React.Dispatch<React.SetStateAction<boolean>>;
-  rules: {
-    required: string;
-  }
 } & TextInputProps
 
 function Input({ 
   name, 
-  control, 
-  rules, 
+  control,
   iconName, 
   isPassword, 
   isPasswordVisible, 
@@ -37,9 +33,6 @@ function Input({
     <Controller
       name={name}
       control={control}
-      rules={{
-        required: true
-      }}
       render={({ field: { value, onChange } }) => (
         <S.Wrapper>
           <S.IconContainer isFocus={isFocus} value={value}>

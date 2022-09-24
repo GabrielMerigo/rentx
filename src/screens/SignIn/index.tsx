@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StatusBar, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { KeyboardAvoidingView, StatusBar, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import React, { useState } from "react";
 
 import { Button } from '../../components/Button';
@@ -9,27 +9,39 @@ import * as Yup from 'yup';
 import theme from "../../styles/theme";
 import { useForm } from 'react-hook-form';
 import Input from "../../components/Input";
+import { useNavigation } from "@react-navigation/native";
 
 export type FormDataSignIn = {
   email: string;
   password: string;
 }
 
+
 export function SignIn(){
-  const schema = Yup.object().shape({
-    email: Yup.string()
-      .required('E-mail required')
-      .email('Digite um e-mail válido'),
-    password: Yup.string()
-      .required('password required')
-  });
-
-  const { control, getValues, handleSubmit } = useForm();
+  const { control, getValues } = useForm<FormDataSignIn>();
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const { navigate } = useNavigation();
 
-  function handleSignIn(){
-    // handleSubmit()
-    console.log(getValues());
+  async function handleSignIn(){
+    try {
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .required('E-mail required')
+          .email('Type an email valid'),
+        password: Yup.string()
+          .required('Password required')
+      })
+  
+      const { email, password } = getValues();
+  
+      await schema.validate({ email, password });
+    } catch (error: any) {
+      Alert.alert('Atention', error.message)
+    }
+  }
+
+  function handleSignUp(){
+    navigate('SignUpFirstStep' as never, { } as never);
   }
 
   return (
@@ -59,10 +71,7 @@ export function SignIn(){
               iconName="mail"
               placeholder="E-mail" 
               name="email" 
-              control={control} 
-              rules={{
-                required: "Email Required"
-              }} 
+              control={control as any} 
             />
             
             <Input
@@ -74,11 +83,8 @@ export function SignIn(){
               iconName="lock"
               placeholder="Password" 
               name="password" 
-              control={control} 
+              control={control as any} 
               secureTextEntry={!!isPasswordVisible}
-              rules={{
-                required: "Email Required"
-              }} 
             />
           </S.Form>
 
@@ -86,14 +92,14 @@ export function SignIn(){
             <Button
               // disabled={}
               title="Login"
-              onPress={() => {}}
+              onPress={() => handleSignIn()}
               loading={false}
             />
 
             <Button
               color={theme.colors.background_secondary}
               title="Criar conta Gratuita"
-              onPress={() => {}}
+              onPress={() => handleSignUp()}
               light
             />
           </S.Footer>
