@@ -7,7 +7,7 @@ import { Home } from './screens/Home';
 import { Scheduling } from './screens/Scheduling'
 import { CarDetails } from './screens/CarDetails'
 import { SchedulingDetails } from './screens/SchedulingDetails'
-import { SchedulingComplete } from './screens/SchedulingComplete'
+import { Confirmation } from './screens/Confirmation'
 import { NavigationContainer } from '@react-navigation/native'
 import { MyCars } from "./screens/MyCars";
 import { Splash } from "./screens/Splash";
@@ -21,7 +21,7 @@ export function Routes() {
   const config = {
     screens: {
       Home: {
-        initialRouteName: 'SignIn',
+        initialRouteName: 'Home',
       },
     }
   };
@@ -62,8 +62,8 @@ export function Routes() {
             component={SchedulingDetails}
           />
           <Screen
-            name="SchedulingComplete"
-            component={SchedulingComplete}
+            name="Confirmation"
+            component={Confirmation}
           />
           <Screen
             name="MyCars"

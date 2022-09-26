@@ -16,8 +16,6 @@ import {
   Archivo_600SemiBold
 } from '@expo-google-fonts/archivo';
 import theme from './src/styles/theme';
-import { Scheduling } from './src/screens/Scheduling';
-import { SchedulingComplete } from './src/screens/SchedulingComplete';
 import { Routes } from './src/routes';
 import { QueryClientProvider, QueryClient } from 'react-query';
 

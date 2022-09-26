@@ -50,7 +50,11 @@ export function SchedulingDetails() {
         unavailable_dates
       })
 
-      navigate('SchedulingComplete' as never, {} as never);
+      navigate('Confirmation' as never, {
+        nextScreenRoute: 'Home',
+        title: 'Car Rated!',
+        message: `Now you just need to go\nto the RENTX concessionaire\ntake your car.`
+      } as never);
     } catch (err) {
       Alert.alert('Não foi possivel realizar essa operação...');
     }

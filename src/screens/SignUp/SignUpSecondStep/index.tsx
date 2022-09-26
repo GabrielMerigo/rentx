@@ -1,6 +1,8 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+
 import { Alert, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { BackButton } from '../../../components/BackButton'
 import { Button } from '../../../components/Button';
@@ -24,8 +26,9 @@ export function SignUpSecondStep() {
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(true);
-  const route = useRoute();
-  const { user } = route.params as Params;
+  const { params } = useRoute();
+  const { navigate } = useNavigation();
+  const { user } = params as Params;
 
   function handleRegister(){
     const { password, repeat_password } = getValues();
@@ -34,9 +37,15 @@ export function SignUpSecondStep() {
       return Alert.alert('You answer the password and repeat password')
     }
 
-    if(!password !== !repeat_password){
+    if(password !== repeat_password){
       return Alert.alert('Passwords are not equal')
     }
+
+    navigate('Confirmation' as never, {
+      nextScreenRoute: 'SignIn',
+      title: 'Account Created',
+      message: `Now, it's only\nyou login`
+    } as never);
   }
 
   return (
