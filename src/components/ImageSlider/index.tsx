@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { FlatList, ViewToken } from 'react-native';
+import { Bullet } from '../../screens/Bullet';
 
 import * as S from './styles';
 
@@ -25,7 +26,7 @@ export function ImageSlider({ imagesUrl }: ImageSliderProps) {
       <S.ImageIndexes>
         {
           imagesUrl.map((_, index) => (
-            <S.ImageIndex
+            <Bullet
               key={String(index)}
               active={index === imageIndex}
             />

@@ -13,6 +13,7 @@ import { MyCars } from "./screens/MyCars";
 import { Splash } from "./screens/Splash";
 import { SignIn } from "./screens/SignIn";
 import { SignUpFirstStep } from './screens/SignUp/SignUpFirstStep'
+import { SignUpSecondStep } from './screens/SignUp/SignUpSecondStep'
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -36,6 +37,10 @@ export function Routes() {
           <Screen
             name="SignUpFirstStep"
             component={SignUpFirstStep}
+          />
+          <Screen
+            name="SignUpSecondStep"
+            component={SignUpSecondStep}
           />
           <Screen
             name="Home"
