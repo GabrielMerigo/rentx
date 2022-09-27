@@ -6,41 +6,34 @@ import { RFValue } from 'react-native-responsive-fontsize'
 import * as S from './styles';
 import { CarCard } from "../../components/CarCard";
 import { useNavigation } from "@react-navigation/native";
-import api from '../../services/api';
 import { useQuery } from "react-query";
-import Loader from "../../components/Load";
-import { Ionicons } from "@expo/vector-icons";
-import theme from "../../styles/theme";
 
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  useAnimatedGestureHandler,
-  withSpring
-} from 'react-native-reanimated';
-import { RectButton, PanGestureHandler } from 'react-native-gesture-handler';
+import theme from "../../styles/theme";
+import api from '../../services/api';
+
+import { useSharedValue } from 'react-native-reanimated';
 import { LoadAnimation } from "../../components/LoadAnimation";
 
-const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
-
 type AccessoryType = {
+  id: string;
   name: string,
   type: string,
 }
 
 export type CarsType = {
   about: string
-  accessories: AccessoryType[],
   brand: string,
   fuel_type: string,
   id: string,
   name: string,
-  photos: string[],
-  rent: {
-    period: string,
-    price: number,
-  },
+  period: string,
+  price: number,
   thumbnail: string,
+  accessories: AccessoryType[],
+  photos: {
+    id: string;
+    photo: string;
+  }[];
 }
 
 type ItemList = {
@@ -53,15 +46,6 @@ export function Home() {
   const positionY = useSharedValue(0);
   const positionX = useSharedValue(0);
 
-  const myCarsButtonStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: positionX.value },
-        { translateY: positionY.value },
-      ]
-    }
-  })
-
   const { data: cars, isLoading } = useQuery<CarsType[]>('cars', async () => {
     const response = await api.get('/cars');
     return response.data;
@@ -70,31 +54,6 @@ export function Home() {
   function handleCarDetails(car: CarsType) {
     navigate('CarDetails' as never, { car } as never);
   }
-
-  function handleOpenMyCars() {
-    navigate('MyCars' as never);
-  }
-
-  const onGestureEvent = useAnimatedGestureHandler({
-    onStart(_, ctx: any) {
-      ctx.positionX = positionX.value;
-      ctx.positionY = positionY.value;
-    },
-    onActive(event, ctx: any) {
-      positionX.value = ctx.positionX + event.translationX;
-      positionY.value = ctx.positionY + event.translationY;
-    },
-    onEnd() {
-      positionX.value = withSpring(0);
-      positionY.value = withSpring(0);
-    }
-  });
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return true
-    })
-  }, [])
 
   return (
     <S.Container>
@@ -127,21 +86,6 @@ export function Home() {
           renderItem={({ item }: ItemList) => <CarCard onPress={() => handleCarDetails(item)} {...item} />}
         />
       )}
-
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View
-          style={[myCarsButtonStyle, { position: 'absolute', bottom: 13, right: 22 }]}
-        >
-          <ButtonAnimated style={styles.button} onPress={handleOpenMyCars}>
-            <Ionicons
-              name="ios-car-sport"
-              size={38}
-              color={theme.colors.shape}
-            />
-          </ButtonAnimated>
-        </Animated.View>
-      </PanGestureHandler>
-
     </S.Container>
   )
 }

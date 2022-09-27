@@ -10,6 +10,7 @@ import theme from "../../styles/theme";
 import { useForm } from 'react-hook-form';
 import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../hooks/auth";
 
 export type FormDataSignIn = {
   email: string;
@@ -18,6 +19,7 @@ export type FormDataSignIn = {
 
 
 export function SignIn(){
+  const { signIn } = useAuth();
   const { control, getValues } = useForm<FormDataSignIn>();
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const { navigate } = useNavigation();
@@ -35,6 +37,13 @@ export function SignIn(){
       const { email, password } = getValues();
   
       await schema.validate({ email, password });
+      Alert.alert('Everything OK!');
+
+      signIn({
+        email,
+        password
+      })
+
     } catch (error: any) {
       Alert.alert('Atention', error.message)
     }

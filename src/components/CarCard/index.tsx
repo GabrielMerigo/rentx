@@ -6,15 +6,13 @@ import { getAccessoryIcon } from '../../utils/getAccessory';
 type CarCardProps = {
   brand: string;
   name: string;
-  rent: {
-    period: string;
-    price: number;
-  },
+  period: string;
+  price: number;
   thumbnail: string;
   fuel_type: string;
 } & TouchableOpacityProps;
 
-export function CarCard({ brand, name, rent, thumbnail, fuel_type, ...rest }: CarCardProps) {
+export function CarCard({ brand, period, price, name, thumbnail, fuel_type, ...rest }: CarCardProps) {
   const MotorIcon = getAccessoryIcon(fuel_type);
 
   return (
@@ -25,8 +23,8 @@ export function CarCard({ brand, name, rent, thumbnail, fuel_type, ...rest }: Ca
 
         <S.About>
           <S.Rent>
-            <S.Period>{rent.period}</S.Period>
-            <S.Price>$ {rent.price}</S.Price>
+            <S.Period>{period}</S.Period>
+            <S.Price>$ {price}</S.Price>
           </S.Rent>
 
           <S.Type>

@@ -10,7 +10,6 @@ import { AntDesign } from '@expo/vector-icons';
 
 import * as S from "./styles";
 import { CarCard } from "../../components/CarCard";
-import Loader from "../../components/Load";
 import { LoadAnimation } from "../../components/LoadAnimation";
 
 

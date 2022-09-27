@@ -2,8 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components'
-
-import { CarDetails } from './src/screens/CarDetails';
+import { AuthProvider } from './src/hooks/auth';
 import {
   useFonts,
   Inter_400Regular,
@@ -37,7 +36,9 @@ export default function App() {
   return (
     <QueryClientProvider client={client}>
       <ThemeProvider theme={theme}>
-        <Routes />
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

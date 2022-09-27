@@ -89,8 +89,8 @@ export function CarDetails() {
           </S.Description>
 
           <S.Rent>
-            <S.Period>{car.rent.period}</S.Period>
-            <S.Price>$ {car.rent.price}</S.Price>
+            <S.Period>{car.period}</S.Period>
+            <S.Price>$ {car.price}</S.Price>
           </S.Rent>
         </S.Details>
 
