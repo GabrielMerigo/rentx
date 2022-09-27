@@ -7,6 +7,7 @@ import { Alert, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 
 import { BackButton } from '../../../components/BackButton'
 import { Button } from '../../../components/Button';
 import Input from '../../../components/Input';
+import api from '../../../services/api';
 import theme from '../../../styles/theme';
 import { Bullet } from '../../Bullet';
 import * as S from './styles';
@@ -30,22 +31,35 @@ export function SignUpSecondStep() {
   const { navigate } = useNavigation();
   const { user } = params as Params;
 
-  function handleRegister(){
-    const { password, repeat_password } = getValues();
+  async function handleRegister(){
+    try {
+      const { password, repeat_password } = getValues();
 
-    if(!password || !repeat_password){
-      return Alert.alert('You answer the password and repeat password')
+      if(!password || !repeat_password){
+        return Alert.alert('You answer the password and repeat password')
+      }
+
+      if(password !== repeat_password){
+        return Alert.alert('Passwords are not equal')
+      }
+
+      const data = await api.post('/users', {
+        name: user.name,
+        email: user.email,
+        driver_license: user.driver_license,
+        password: password
+      });
+
+      console.log(data);
+
+      navigate('Confirmation' as never, {
+        nextScreenRoute: 'SignIn',
+        title: 'Account Created',
+        message: `Now, it's only\nyou login`
+      } as never);
+    } catch (error) {
+      Alert.alert('Attention', 'It could not register...')
     }
-
-    if(password !== repeat_password){
-      return Alert.alert('Passwords are not equal')
-    }
-
-    navigate('Confirmation' as never, {
-      nextScreenRoute: 'SignIn',
-      title: 'Account Created',
-      message: `Now, it's only\nyou login`
-    } as never);
   }
 
   return (
