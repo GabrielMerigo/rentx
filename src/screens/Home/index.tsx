@@ -43,9 +43,6 @@ type ItemList = {
 export function Home() {
   const { navigate } = useNavigation();
 
-  const positionY = useSharedValue(0);
-  const positionX = useSharedValue(0);
-
   const { data: cars, isLoading } = useQuery<CarsType[]>('cars', async () => {
     const response = await api.get('/cars');
     return response.data;
