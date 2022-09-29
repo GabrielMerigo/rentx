@@ -7,13 +7,13 @@ import HomeSvg from '../assets/home.svg';
 import CarSvg from '../assets/car.svg';
 import PeopleSvg from '../assets/people.svg';
 
-import { Home } from '../screens/Home';
 import { NavigationContainer } from '@react-navigation/native'
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MyCars } from "../screens/MyCars";
 import { AppStackRoutes } from "./app.stack.routes";
 import theme from "../styles/theme";
+import { Profile } from "../screens/Profile";
 
 export function AppTabRoutes() {
   return (
@@ -37,20 +37,20 @@ export function AppTabRoutes() {
             }}
           />
           <Screen
-            name="Profile"
-            component={Home}
-            options={{
-              tabBarIcon: ({ color }) => (
-                <PeopleSvg width={24} height={24} fill={color} />
-              )
-            }}
-          />
-          <Screen
             name="MyCars"
             component={MyCars}
             options={{
               tabBarIcon: ({ color }) => (
                 <CarSvg width={24} height={24} fill={color} />
+              )
+            }}
+          />
+          <Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <PeopleSvg width={24} height={24} fill={color} />
               )
             }}
           />

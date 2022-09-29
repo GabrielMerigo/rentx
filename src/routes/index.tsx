@@ -10,7 +10,7 @@ export function Routes(){
 
   return (
     <>
-      { user ? (<AppTabRoutes /> ) : <AuthRoutes />}
+      { user.id ? (<AppTabRoutes /> ) : <AuthRoutes />}
     </>
   )
 }

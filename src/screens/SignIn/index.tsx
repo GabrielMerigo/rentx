@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, StatusBar, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button } from '../../components/Button';
 
@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/auth";
+import { database } from "../../database";
 
 export type FormDataSignIn = {
   email: string;

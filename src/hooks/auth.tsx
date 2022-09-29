@@ -1,8 +1,13 @@
 import React, { 
   createContext ,
   useState,
-  useContext
+  useContext,
+  useEffect,
+  useCallback
 } from "react";
+import { useQuery } from "react-query";
+import { database } from "../database";
+import { User as ModelUser } from "../database/model/User";
 import api from "../services/api";
 
 type User = {
@@ -11,11 +16,7 @@ type User = {
   name: string;
   driver_license: string;
   avatar: string;
-}
-
-type AuthState = {
   token: string;
-  user: User;
 }
 
 type SignInCredentials = {
@@ -35,23 +36,55 @@ type AuthProviderProps = {
 }
 
 function AuthProvider({ children }: AuthProviderProps){
-  const [data, setData] = useState<AuthState>({} as AuthState);
+  const [data, setData] = useState<User>({} as User);
 
   async function signIn({ email, password }: SignInCredentials){
-    const response = await api.post('/sessions', {
-      email,
-      password
-    });
+    try {
+      const response = await api.post('/sessions', {
+        email,
+        password
+      });
 
-   const { token, user } = response.data;
-   api.defaults.headers.common['Authorization'] = 'Bearer' + token;
-   setData({ token, user });
+      const { token, user } = response.data;
+      api.defaults.headers.common['Authorization'] = 'Bearer' + token;
+
+      const userCollection = database.get<ModelUser>('users');
+      await database.write(async () => {
+        await userCollection.create((newUser) => {
+          newUser.user_id = user.id,
+          newUser.name = user.name,
+          newUser.email = user.email,
+          newUser.driver_license = user.driver_license,
+          newUser.avatar = user.avatar,
+          newUser.token = user.token
+        })
+      })
+
+     setData({ ...user, token });
+    } catch (error: any) {
+      throw new Error(error);
+    }
   }
+
+  const getUser = useCallback(async () => {
+    const userCollection = database.get<ModelUser>('users');
+    const response = await userCollection.query().fetch();
+    
+    if(response.length > 0){
+      const userData = response[0]._raw as any as User;
+      api.defaults.headers.common['Authorization'] = 'Bearer ' + userData.token;
+      setData(userData)
+    }
+  }, [])
+
+  useEffect(() => {
+    getUser();
+  }, [])
 
   return (
     <AuthContext.Provider 
       value={{
-        user: data.user,
+        user: data,
         signIn
       }}
      >
