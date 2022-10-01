@@ -4,7 +4,7 @@ import styled, { css, DefaultTheme } from "styled-components/native";
 
 export const Container = styled.View`
   ${({ theme }) => css`
-    flex: 1;
+    /* flex: 1; */
     background-color: ${theme.colors.background_primary};
   `}
 `;
@@ -77,7 +77,6 @@ type OptionProps = {
 };
 
 export const Content = styled.View`
-  flex: 1;
   padding: 0 24px;
   margin-top: 122px;
 `;
@@ -122,3 +121,5 @@ export const OptionTitle = styled.Text<OptionProps>`
     ${active && wrapperModifiers.activeTitle(theme)}
   `}
 `;
+
+export const Section = styled.View``;

@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, StatusBar, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Button } from '../../components/Button';
 
@@ -38,13 +38,11 @@ export function SignIn(){
       const { email, password } = getValues();
   
       await schema.validate({ email, password });
-      Alert.alert('Everything OK!');
 
       signIn({
         email,
         password
-      })
-
+      });
     } catch (error: any) {
       Alert.alert('Atention', error.message)
     }
@@ -85,8 +83,6 @@ export function SignIn(){
             />
             
             <Input
-              isPasswordVisible={isPasswordVisible}
-              setIsPasswordVisible={setIsPasswordVisible}
               isPassword
               autoCorrect={false}
               autoCapitalize="none"
@@ -94,6 +90,8 @@ export function SignIn(){
               placeholder="Password" 
               name="password" 
               control={control as any} 
+              isPasswordVisible={isPasswordVisible}
+              setIsPasswordVisible={setIsPasswordVisible}
               secureTextEntry={!!isPasswordVisible}
             />
           </S.Form>
