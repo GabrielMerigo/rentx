@@ -2,14 +2,17 @@ import { useNavigation } from '@react-navigation/native';
 import { BackButton } from '../../components/BackButton';
 import { Feather } from '@expo/vector-icons';
 import theme from '../../styles/theme';
-import * as S from './styles';
 import { useState } from 'react';
 import Input from '../../components/Input';
 import { useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useAuth } from '../../hooks/auth';
+import { Button } from '../../components/Button';
+
+import * as S from './styles';
 import * as ImagePicker from 'expo-image-picker';
+import * as Yup from 'yup';
 
 export function Profile(){
   const { goBack } = useNavigation();
@@ -17,10 +20,14 @@ export function Profile(){
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(true);
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(true);
   const [isRepeatNewPasswordVisible, setIsRepeatNewPasswordVisible] = useState(true);
-  const { control } = useForm();
+  const { control, getValues } = useForm();
 
-  const { user } = useAuth();
+  const { user, signOut, updateUser } = useAuth();
   const [avatar, setAvatar] = useState(user.avatar);
+
+  function handleBack(){
+    goBack();
+  }
 
   async function handleSelectAvatar() {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -37,21 +44,60 @@ export function Profile(){
     }
   }
 
-  function handleBack(){
-    goBack();
-  }
+  async function handleProfileUpdate(){
+    try {
+      const schema = Yup.object().shape({ 
+        driver_license: Yup.string().required('Driver License is required'),
+        name: Yup.string().required('Name is required')
+      });
 
-  function handleSignIn(){
-    
+      const { name, driver_license } = getValues();
+      const dataForm = { name, driver_license };
+
+      await updateUser({
+        id: user.id,
+        user_id: user.user_id,
+        email: user.email,
+        name,
+        driver_license,
+        avatar,
+        token: user.token
+      });
+
+      Alert.alert('Profile updated!')
+
+    } catch (error) {
+      if(error instanceof Yup.ValidationError){
+        Alert.alert('Opa', error.message);
+      }else{
+        Alert.alert('It was not possible update your profile! Please try again.')
+      }
+    }
   }
 
   function handleSignOut(){
-    
+    Alert.alert(
+      'Are you sure you want to sign out?',
+      'Remember, if you sign out, you will need internet to connect again.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel'
+        },
+        {
+          text: 'Confirm',
+          onPress: () => signOut()
+        }
+      ]
+    )
   }
+
+
 
   return (
     <KeyboardAvoidingView behavior="position">
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <S.Container>
           <S.Header>
             <S.HeaderTop>
@@ -100,7 +146,7 @@ export function Profile(){
                     defaultValue={user.email}
                   />
                   <Input
-                    name="cnh"
+                    name="driver_license"
                     control={control}
                     iconName="credit-card"
                     placeholder="CNH"
@@ -144,6 +190,11 @@ export function Profile(){
                 />
               </S.Section>
             )}
+
+            <Button
+              title="Salvar alterações"
+              onPress={handleProfileUpdate}
+            />
           </S.Content>
         </S.Container>
         </TouchableWithoutFeedback>

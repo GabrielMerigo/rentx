@@ -17,6 +17,7 @@ type User = {
   driver_license: string;
   avatar: string;
   token: string;
+  user_id: string;
 }
 
 type SignInCredentials = {
@@ -27,6 +28,8 @@ type SignInCredentials = {
 type AuthContextData = {
   user: User;
   signIn: (credentials: SignInCredentials) => Promise<void>;
+  signOut: () => Promise<void>;
+  updateUser: (user: User) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -36,7 +39,7 @@ type AuthProviderProps = {
 }
 
 function AuthProvider({ children }: AuthProviderProps){
-  const [data, setData] = useState<User>({} as User);
+  const [user, setUser] = useState<User>({} as User);
 
   async function signIn({ email, password }: SignInCredentials){
     try {
@@ -60,9 +63,41 @@ function AuthProvider({ children }: AuthProviderProps){
         })
       })
 
-     setData({ ...user, token });
+      setUser({ ...user, token });
     } catch (error: any) {
       throw new Error(error);
+    }
+  }
+
+  async function signOut(){
+    try{
+      const userCollection = database.get<ModelUser>('users');
+      await database.write(async () => {
+        const userSelected = await userCollection.find(user.id);
+        await userSelected.destroyPermanently();
+      })
+
+      setUser({} as User);
+    }catch(error){
+      throw new Error('');
+    }
+  }
+
+  async function updateUser(currentUser: User) {
+    try {
+      const userCollection = database.get<ModelUser>('users');
+      await database.write(async () => {
+        const userSelected = await userCollection.find(currentUser.id);
+        await userSelected.update(userData => {
+          userData.name = currentUser.name;
+          userData.driver_license = currentUser.driver_license;
+          userData.avatar = currentUser.avatar;
+        })
+      })
+
+      setUser(currentUser);
+    } catch (error) {
+      throw new Error('')
     }
   }
 
@@ -73,7 +108,7 @@ function AuthProvider({ children }: AuthProviderProps){
     if(response.length > 0){
       const userData = response[0]._raw as any as User;
       api.defaults.headers.common['Authorization'] = 'Bearer ' + userData.token;
-      setData(userData)
+      setUser(userData)
     }
   }, [])
 
@@ -84,8 +119,10 @@ function AuthProvider({ children }: AuthProviderProps){
   return (
     <AuthContext.Provider 
       value={{
-        user: data,
-        signIn
+        user,
+        signIn,
+        signOut,
+        updateUser
       }}
      >
       {children}

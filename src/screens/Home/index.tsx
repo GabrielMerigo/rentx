@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { BackHandler, StatusBar, StyleSheet } from "react-native";
+import { Alert, BackHandler, StatusBar, StyleSheet } from "react-native";
 import Logo from '../../assets/logo.svg'
 import { RFValue } from 'react-native-responsive-fontsize'
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import * as S from './styles';
 import { CarCard } from "../../components/CarCard";
@@ -11,7 +12,6 @@ import { useQuery } from "react-query";
 import theme from "../../styles/theme";
 import api from '../../services/api';
 
-import { useSharedValue } from 'react-native-reanimated';
 import { LoadAnimation } from "../../components/LoadAnimation";
 
 type AccessoryType = {
@@ -42,6 +42,7 @@ type ItemList = {
 
 export function Home() {
   const { navigate } = useNavigation();
+  const netInfo = useNetInfo();
 
   const { data: cars, isLoading } = useQuery<CarsType[]>('cars', async () => {
     const response = await api.get('/cars');
@@ -51,6 +52,14 @@ export function Home() {
   function handleCarDetails(car: CarsType) {
     navigate('CarDetails' as never, { car } as never);
   }
+
+  useEffect(() => {
+    if(netInfo.isConnected){
+      Alert.alert('online');
+    }else{
+      Alert.alert('off');
+    }
+  }, []);
 
   return (
     <S.Container>
