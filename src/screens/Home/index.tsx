@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Alert, BackHandler, StatusBar, StyleSheet } from "react-native";
+import { Alert, StatusBar, Button } from "react-native";
 import Logo from '../../assets/logo.svg'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useNetInfo } from '@react-native-community/netinfo';
@@ -8,11 +8,13 @@ import * as S from './styles';
 import { CarCard } from "../../components/CarCard";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "react-query";
+import { synchronize } from '@nozbe/watermelondb/sync';
 
 import theme from "../../styles/theme";
 import api from '../../services/api';
 
 import { LoadAnimation } from "../../components/LoadAnimation";
+import { database } from "../../database";
 
 type AccessoryType = {
   id: string;
@@ -53,13 +55,32 @@ export function Home() {
     navigate('CarDetails' as never, { car } as never);
   }
 
+  async function offlineSynchronize(){
+    await synchronize({
+      database,
+      pushChanges: async ({ changes }) => {
+        console.log("APP PARA O BACKEND");
+        console.log(changes);
+      },
+      pullChanges: async ({ lastPulledAt }) => {
+        const { data } = await api.get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+        const { changes, latestVersion } = data;
+
+        console.log("BACKEND PARA O APP");
+        console.log(changes);
+
+        return { changes, timestamp: latestVersion };
+      }
+    })
+  }
+
   useEffect(() => {
     if(netInfo.isConnected){
       Alert.alert('online');
     }else{
       Alert.alert('off');
     }
-  }, []);
+  }, [netInfo.isConnected]);
 
   return (
     <S.Container>
@@ -70,6 +91,7 @@ export function Home() {
       />
 
       <S.Header>
+
         <S.HeaderContent>
           <Logo
             width={RFValue(108)}
@@ -82,6 +104,7 @@ export function Home() {
           )}
         </S.HeaderContent>
       </S.Header>
+      <Button title="teste"  onPress={offlineSynchronize} />
 
       {isLoading ? (
         <LoadAnimation />
@@ -95,14 +118,3 @@ export function Home() {
     </S.Container>
   )
 }
-
-const styles = StyleSheet.create({
-  button: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: theme.colors.main
-  }
-})

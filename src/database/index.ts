@@ -9,7 +9,7 @@ const adapter = new SQLiteAdapter({
   schema: schemas
 });
 
-export const database =  new Database({
+export const database = new Database({
   adapter,
   modelClasses: [
     User,
