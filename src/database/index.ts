@@ -14,5 +14,6 @@ export const database = new Database({
   modelClasses: [
     User,
     Car
-  ]
+  ],
+  actionsEnabled: true
 })

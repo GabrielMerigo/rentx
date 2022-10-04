@@ -49,15 +49,15 @@ export function Home() {
   const { data: cars, isLoading } = useQuery<CarsType[]>('cars', async () => {
     const carCollection = database.get<ModelCar>('cars');
     const carsResponse = await carCollection.query().fetch();
-    
-    return carsResponse;
+    console.log(carsResponse);
+
+    return carsResponse as unknown as CarsType[];
   });
 
   function handleCarDetails(car: CarsType) {
     navigate('CarDetails' as never, { car } as never);
   }
 
-  // TENTAR MUDAR VERSÃO DO WATERMELONDB
   async function offlineSynchronize(){
     await synchronize({
       database,
@@ -94,7 +94,6 @@ export function Home() {
       />
 
       <S.Header>
-
         <S.HeaderContent>
           <Logo
             width={RFValue(108)}

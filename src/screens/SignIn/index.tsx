@@ -11,7 +11,6 @@ import { useForm } from 'react-hook-form';
 import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/auth";
-import { database } from "../../database";
 
 export type FormDataSignIn = {
   email: string;
@@ -36,7 +35,6 @@ export function SignIn(){
       })
   
       const { email, password } = getValues();
-  
       await schema.validate({ email, password });
 
       signIn({
@@ -44,6 +42,7 @@ export function SignIn(){
         password
       });
     } catch (error: any) {
+      console.log(error);
       Alert.alert('Atention', error.message)
     }
   }
@@ -98,7 +97,6 @@ export function SignIn(){
 
           <S.Footer>
             <Button
-              // disabled={}
               title="Login"
               onPress={() => handleSignIn()}
               loading={false}

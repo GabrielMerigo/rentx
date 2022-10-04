@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback
 } from "react";
-import { useQuery } from "react-query";
+
 import { database } from "../database";
 import { User as ModelUser } from "../database/model/User";
 import api from "../services/api";
@@ -52,7 +52,7 @@ function AuthProvider({ children }: AuthProviderProps){
       api.defaults.headers.common['Authorization'] = 'Bearer' + token;
 
       const userCollection = database.get<ModelUser>('users');
-      await database.write(async () => {
+      await database.action(async () => {
         await userCollection.create((newUser) => {
           newUser.user_id = user.id,
           newUser.name = user.name,
@@ -72,7 +72,7 @@ function AuthProvider({ children }: AuthProviderProps){
   async function signOut(){
     try{
       const userCollection = database.get<ModelUser>('users');
-      await database.write(async () => {
+      await database.action(async () => {
         const userSelected = await userCollection.find(user.id);
         await userSelected.destroyPermanently();
       })
@@ -86,7 +86,7 @@ function AuthProvider({ children }: AuthProviderProps){
   async function updateUser(currentUser: User) {
     try {
       const userCollection = database.get<ModelUser>('users');
-      await database.write(async () => {
+      await database.action(async () => {
         const userSelected = await userCollection.find(currentUser.id);
         await userSelected.update(userData => {
           userData.name = currentUser.name;
