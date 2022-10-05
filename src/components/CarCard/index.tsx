@@ -1,30 +1,25 @@
 import * as S from './styles';
-import GasolineSvg from '../../assets/gasoline.svg'
 import { TouchableOpacityProps } from 'react-native';
 import { getAccessoryIcon } from '../../utils/getAccessory';
+import { Car as ModelCar } from "../../database/model/Car";
 
 type CarCardProps = {
-  brand: string;
-  name: string;
-  period: string;
-  price: number;
-  thumbnail: string;
-  fuel_type: string;
+  data: ModelCar
 } & TouchableOpacityProps;
 
-export function CarCard({ brand, period, price, name, thumbnail, fuel_type, ...rest }: CarCardProps) {
-  const MotorIcon = getAccessoryIcon(fuel_type);
+export function CarCard({ data, ...rest }: CarCardProps) {
+  const MotorIcon = getAccessoryIcon(data.fuel_type);
 
   return (
     <S.Container {...rest}>
       <S.Details>
-        <S.Brand>{brand}</S.Brand>
-        <S.Name>{name}</S.Name>
+        <S.Brand>{data.brand}</S.Brand>
+        <S.Name>{data.name}</S.Name>
 
         <S.About>
           <S.Rent>
-            <S.Period>{period}</S.Period>
-            <S.Price>$ {price}</S.Price>
+            <S.Period>{data.period}</S.Period>
+            <S.Price>$ {data.price}</S.Price>
           </S.Rent>
 
           <S.Type>
@@ -33,7 +28,7 @@ export function CarCard({ brand, period, price, name, thumbnail, fuel_type, ...r
         </S.About>
 
       </S.Details>
-      <S.CarImage resizeMode="contain" source={{ uri: thumbnail }}></S.CarImage>
+      <S.CarImage resizeMode="contain" source={{ uri: data.thumbnail }}></S.CarImage>
     </S.Container>
   );
 }
