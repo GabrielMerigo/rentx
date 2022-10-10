@@ -49,7 +49,7 @@ export function CarDetails() {
         Extrapolate.CLAMP
       )
     }
-  })
+  });
 
   return (
     <S.Container>
@@ -67,7 +67,10 @@ export function CarDetails() {
         <Animated.View style={sliderCarStyleAnimations}>
           <S.CarImages>
             <ImageSlider
-              imagesUrl={car.photos}
+              imagesUrl={
+                !!car.photos ?
+                  car.photos : [{ id: car.thumbnail, photo: car.thumbnail }]
+              }
             />
           </S.CarImages>
         </Animated.View>
@@ -95,7 +98,7 @@ export function CarDetails() {
         </S.Details>
 
         <S.Accessories>
-          {car.accessories.map(acessory => (
+          {car.accessories && car.accessories.map(acessory => (
             <Accessory
               key={acessory.type}
               name={acessory.name}

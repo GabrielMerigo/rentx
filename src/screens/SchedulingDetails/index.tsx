@@ -88,7 +88,7 @@ export function SchedulingDetails() {
         </S.Details>
 
         <S.Accessories>
-          {car.accessories.map(accessory => (
+          {car.accessories && car.accessories.map(accessory => (
             <Accessory
               key={accessory.type}
               name={accessory.name}

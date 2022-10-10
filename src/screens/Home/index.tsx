@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import Logo from '../../assets/logo.svg'
 import { RFValue } from 'react-native-responsive-fontsize'
@@ -45,13 +45,22 @@ type ItemList = {
 export function Home() {
   const { navigate } = useNavigation();
   const netInfo = useNetInfo();
+  const [cars, setCars] = useState<ModelCar[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  async function fetchCars() {
+    try {
+      const carCollection = database.get<ModelCar>('cars');
+      const cars = await carCollection.query().fetch();
 
-  const { data: cars, isLoading } = useQuery('cars', async () => {
-    const carCollection = database.get<ModelCar>('cars');
-    const carsResponse = await carCollection.query().fetch();
+      setCars(cars);
 
-    return carsResponse as unknown as ModelCar[];
-  });
+    } catch (error) {
+      console.log(error);
+    }finally{
+      setLoading(false);
+    }
+  }
 
   function handleCarDetails(car: CarsType) {
     navigate('CarDetails' as never, { car } as never);
@@ -63,15 +72,30 @@ export function Home() {
       pullChanges: async ({ lastPulledAt }) => {
         const { data } = await api.get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
         const { changes, latestVersion } = data;
+        console.log('###### SINCRONIZAÇÃO #####')
 
         return { changes, timestamp: latestVersion };
       },
       pushChanges: async ({ changes }) => {
         const user = changes.users;
-        await api.post('/users/sync', user);
-      }
+        if (user) {
+          await api.post('/users/sync', user);
+        }
+      },
     })
   }
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (isMounted) {
+      fetchCars();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useFocusEffect(useCallback(() => {
     if(netInfo.isConnected === true){
@@ -94,7 +118,7 @@ export function Home() {
             width={RFValue(108)}
             height={RFValue(12)}
           />
-          {!isLoading && (
+          {!loading && (
             <S.TotalCars>
               Total of {cars?.length} cars
             </S.TotalCars>
@@ -102,7 +126,7 @@ export function Home() {
         </S.HeaderContent>
       </S.Header>
 
-      {isLoading ? (
+      {loading ? (
         <LoadAnimation />
       ) : (
         <S.CarList
