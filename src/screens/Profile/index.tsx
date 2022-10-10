@@ -13,6 +13,7 @@ import { Button } from '../../components/Button';
 import * as S from './styles';
 import * as ImagePicker from 'expo-image-picker';
 import * as Yup from 'yup';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 export function Profile(){
   const { goBack } = useNavigation();
@@ -21,6 +22,7 @@ export function Profile(){
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(true);
   const [isRepeatNewPasswordVisible, setIsRepeatNewPasswordVisible] = useState(true);
   const { control, getValues } = useForm();
+  const netInfo = useNetInfo();
 
   const { user, signOut, updateUser } = useAuth();
   const [avatar, setAvatar] = useState(user.avatar);
@@ -93,7 +95,13 @@ export function Profile(){
     )
   }
 
+  function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
+    if(netInfo.isConnected === false && optionSelected === 'passwordEdit') {
+      return Alert.alert('You are offline', 'To change your password, connect to the Internet');
+    }
 
+    setOption(optionSelected);
+  }
 
   return (
     <KeyboardAvoidingView behavior="position">
@@ -121,10 +129,10 @@ export function Profile(){
 
           <S.Content style={{ marginBottom: useBottomTabBarHeight() }}>
             <S.ContentHeader>
-              <S.Option onPress={() => setOption('dataEdit')} active={option === 'dataEdit'}>
+              <S.Option onPress={() => handleOptionChange('dataEdit')} active={option === 'dataEdit'}>
                 <S.OptionTitle active={option === 'dataEdit'}>Data</S.OptionTitle>
               </S.Option>
-              <S.Option onPress={() => setOption('passwordEdit')} active={option === 'passwordEdit'}>
+              <S.Option onPress={() => handleOptionChange('passwordEdit')} active={option === 'passwordEdit'}>
                 <S.OptionTitle active={option === 'passwordEdit'}>Change Password</S.OptionTitle>
               </S.Option>
             </S.ContentHeader>

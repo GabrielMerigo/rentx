@@ -105,6 +105,15 @@ export const Accessories = styled.View`
   margin-top: 16px;
 `;
 
+export const OfflineInfo = styled.Text`
+  ${({ theme }) => css`
+    font-family: ${theme.fonts.primary_400};
+    color: ${theme.colors.main};
+    font-size: ${RFValue(10)}px;
+    text-align: center;
+  `}
+`;
+
 export const Footer = styled.View`
   ${({ theme }) => css`
     width: 100%;

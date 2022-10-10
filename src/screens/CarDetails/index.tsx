@@ -11,14 +11,22 @@ import { CarsType } from '../Home'
 import { getAccessoryIcon } from '../../utils/getAccessory'
 import Animated, { Extrapolate, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
+import { Car as ModelCar } from '../../database/model/Car';
+import { useEffect, useState } from "react";
+import api from "../../services/api";
+import { useNetInfo } from "@react-native-community/netinfo";
+
 export type RouteParams = {
   car: CarsType;
 }
 
 export function CarDetails() {
+  const [carUpdated, setCarUpdated] = useState<CarsType>({} as CarsType);
+
   const { navigate, goBack } = useNavigation();
   const route = useRoute();
   const { car } = route.params as RouteParams;
+  const netInfo = useNetInfo();
 
   function handleConfirmRental() {
     navigate('Scheduling' as never, { car } as never);
@@ -51,6 +59,17 @@ export function CarDetails() {
     }
   });
 
+  useEffect(() => {
+    async function fetchOnlineData(){
+      const res = await api.get(`/cars/${car.id}`);
+      setCarUpdated(res.data)
+    }
+
+    if(netInfo.isConnected === true){
+      fetchOnlineData();
+    }
+  }, [netInfo.isConnected])
+
   return (
     <S.Container>
       <StatusBar
@@ -68,8 +87,8 @@ export function CarDetails() {
           <S.CarImages>
             <ImageSlider
               imagesUrl={
-                !!car.photos ?
-                  car.photos : [{ id: car.thumbnail, photo: car.thumbnail }]
+                !!carUpdated.photos ?
+                  carUpdated.photos : [{ id: car.thumbnail, photo: car.thumbnail }]
               }
             />
           </S.CarImages>
@@ -93,12 +112,12 @@ export function CarDetails() {
 
           <S.Rent>
             <S.Period>{car.period}</S.Period>
-            <S.Price>$ {car.price}</S.Price>
+            <S.Price>$ {netInfo.isConnected === true ? car.price : '...'}</S.Price>
           </S.Rent>
         </S.Details>
 
         <S.Accessories>
-          {car.accessories && car.accessories.map(acessory => (
+          {carUpdated.accessories && carUpdated.accessories.map(acessory => (
             <Accessory
               key={acessory.type}
               name={acessory.name}
@@ -109,15 +128,14 @@ export function CarDetails() {
 
         <S.About>
           {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
         </S.About>
       </Animated.ScrollView>
 
       <S.Footer>
-        <Button color={theme.colors.main} title="Choose Rental Period" onPress={handleConfirmRental} />
+        <Button disabled={!netInfo.isConnected} color={theme.colors.main} title="Choose Rental Period" onPress={handleConfirmRental} />
+        {netInfo.isConnected === false &&
+          <S.OfflineInfo>You need conect to see more details.</S.OfflineInfo>
+        }
       </S.Footer>
     </S.Container>
   )
