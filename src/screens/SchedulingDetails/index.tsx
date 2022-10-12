@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar'
 import { Accessory } from '../../components/Accessory'
 import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
@@ -13,7 +12,8 @@ import { getAccessoryIcon } from '../../utils/getAccessory';
 import { CarsType } from '../Home'
 import api from '../../services/api'
 import { Alert } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNetInfo } from '@react-native-community/netinfo'
 
 export type RouteParams = {
   car: CarsType;
@@ -22,6 +22,8 @@ export type RouteParams = {
 
 export function SchedulingDetails() {
   const theme = useTheme();
+  const [carUpdated, setCarUpdated] = useState<CarsType>({} as CarsType);
+  const netInfo = useNetInfo();
   const { navigate, goBack } = useNavigation();
   const [loading, setLoading] = useState(false);
 
@@ -31,36 +33,40 @@ export function SchedulingDetails() {
 
   async function handleConfirmRental() {
     setLoading(true);
-    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
-    const unavailable_dates = [
-      ...schedulesByCar.data.unavailable_dates,
-      ...dates
-    ];
 
-    await api.post('/schedules_byuser', {
+
+    await api.post('/rentals', {
       user_id: 1,
-      car,
-      startDate: dates[0],
-      endDate: dates[dates.length - 1],
+      car_id: car.id,
+      start_date: new Date(dates[0]),
+      end_date: new Date(dates[dates.length - 1]),
+      total: rentTotal
     });
 
     try {
-      await api.put(`/schedules_bycars/${car.id}`, {
-        id: car.id,
-        unavailable_dates
-      })
-
       navigate('Confirmation' as never, {
         nextScreenRoute: 'Home',
         title: 'Car Rated!',
         message: `Now you just need to go\nto the RENTX concessionaire\ntake your car.`
       } as never);
     } catch (err) {
+      console.log(err)
       Alert.alert('Não foi possivel realizar essa operação...');
     }
 
     setLoading(false);
   }
+
+  useEffect(() => {
+    async function fetchOnlineData(){
+      const res = await api.get(`/cars/${car.id}`);
+      setCarUpdated(res.data)
+    }
+
+    if(netInfo.isConnected === true){
+      fetchOnlineData();
+    }
+  }, [netInfo.isConnected]);
 
   return (
     <S.Container>
@@ -70,7 +76,10 @@ export function SchedulingDetails() {
 
       <S.CarImages>
         <ImageSlider
-          imagesUrl={car.photos}
+          imagesUrl={
+            !!carUpdated.photos ?
+              carUpdated.photos : [{ id: car.thumbnail, photo: car.thumbnail }]
+          }
         />
       </S.CarImages>
 
@@ -88,14 +97,13 @@ export function SchedulingDetails() {
         </S.Details>
 
         <S.Accessories>
-          {car.accessories && car.accessories.map(accessory => (
+          {carUpdated.accessories && carUpdated.accessories.map(accessory => (
             <Accessory
               key={accessory.type}
               name={accessory.name}
               icon={getAccessoryIcon(accessory.type)}
             />
           ))}
-
         </S.Accessories>
 
         <S.RentalPeriod>

@@ -68,7 +68,7 @@ export function CarDetails() {
     if(netInfo.isConnected === true){
       fetchOnlineData();
     }
-  }, [netInfo.isConnected])
+  }, [netInfo.isConnected]);
 
   return (
     <S.Container>

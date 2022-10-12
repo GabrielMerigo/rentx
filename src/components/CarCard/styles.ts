@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components/native";
-import { RFValue } from 'react-native-responsive-fontsize'
+import { RFValue } from 'react-native-responsive-fontsize';
+import FastImage from 'react-native-fast-image';
 
 export const Container = styled.TouchableOpacity`
   ${({ theme  }) => css`
@@ -66,7 +67,7 @@ export const Type = styled.View`
   margin-top: 10px;
 `;
 
-export const CarImage = styled.Image`
+export const CarImage = styled(FastImage as any)`
   width: 180px;
   height: 92px;
 `;

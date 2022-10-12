@@ -3,6 +3,8 @@ import React from 'react';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components'
 import { AuthProvider } from './src/hooks/auth';
+import { LogBox } from 'react-native';
+
 import {
   useFonts,
   Inter_400Regular,
@@ -26,6 +28,13 @@ export default function App() {
     Archivo_500Medium,
     Archivo_600SemiBold
   })
+
+
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+    'Expected style "fontSize: 17" to contain units',
+    'expo-app-loading'
+  ]);
 
   if (!fontsLoaded) {
     return <AppLoading />
