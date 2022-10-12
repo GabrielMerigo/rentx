@@ -12,10 +12,12 @@ import api from "../services/api";
 
 type User = {
   id: string;
-  email: string;
-  name: string;
-  driver_license: string;
-  avatar: string;
+  email?: string;
+  name?: string;
+  driver_license?: string;
+  password?: string;
+  old_password?: string;
+  avatar?: string;
   token: string;
   user_id: string;
 }
@@ -49,17 +51,17 @@ function AuthProvider({ children }: AuthProviderProps){
       });
 
       const { token, user } = response.data;
-      api.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
       const userCollection = database.get<ModelUser>('users');
       await database.action(async () => {
         await userCollection.create((newUser) => {
-          newUser.user_id = user.id,
-          newUser.name = user.name,
-          newUser.email = user.email,
-          newUser.driver_license = user.driver_license,
-          newUser.avatar = user.avatar,
-          newUser.token = user.token
+          (newUser.user_id = user.id),
+          (newUser.name = user.name),
+          (newUser.email = user.email),
+          (newUser.driver_license = user.driver_license),
+          (newUser.avatar = user.avatar),
+          (newUser.token = token)
         })
       })
 
@@ -83,31 +85,34 @@ function AuthProvider({ children }: AuthProviderProps){
     }
   }
 
-  async function updateUser(currentUser: User) {
+  async function updateUser(user: User) {
     try {
       const userCollection = database.get<ModelUser>('users');
-      await database.action(async () => {
-        const userSelected = await userCollection.find(currentUser.id);
-        await userSelected.update(userData => {
-          userData.name = currentUser.name;
-          userData.driver_license = currentUser.driver_license;
-          userData.avatar = currentUser.avatar;
-        })
-      })
 
-      setUser(currentUser);
-    } catch (error) {
-      throw new Error('')
-    }
+      await database.action(async () => {
+        const userSelected = await userCollection.find(user.id);
+
+        await userSelected.update(userData => {
+          (userData.name = String(user.name)),
+          (userData.driver_license = String(user.driver_license)),
+          (userData.avatar = String(user.avatar));
+        });
+      });
+
+      setUser(user);
+    } catch (error) {}
   }
 
   const getUser = useCallback(async () => {
     const userCollection = database.get<ModelUser>('users');
     const response = await userCollection.query().fetch();
+
     
     if(response.length > 0){
       const userData = response[0]._raw as any as User;
+      console.log(userData);
       api.defaults.headers.common['Authorization'] = 'Bearer ' + userData.token;
+  
       setUser(userData)
     }
   }, [])

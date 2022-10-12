@@ -48,20 +48,24 @@ export function Profile(){
 
   async function handleProfileUpdate(){
     try {
-      const schema = Yup.object().shape({ 
-        driver_license: Yup.string().required('Driver License is required'),
-        name: Yup.string().required('Name is required')
-      });
-
       const { name, driver_license } = getValues();
-      const dataForm = { name, driver_license };
 
-      await updateUser({
+      console.log({
         id: user.id,
         user_id: user.user_id,
         email: user.email,
         name,
         driver_license,
+        avatar,
+        token: user.token
+      })
+
+      await updateUser({
+        id: user.id,
+        user_id: user.user_id,
+        email: user.email,
+        name: name ? name : user.name,
+        driver_license:  driver_license ? driver_license : user.driver_license,
         avatar,
         token: user.token
       });
@@ -198,7 +202,6 @@ export function Profile(){
                 />
               </S.Section>
             )}
-
             <Button
               title="Salvar alterações"
               onPress={handleProfileUpdate}

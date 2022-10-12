@@ -44,7 +44,7 @@ function Input({
           </S.IconContainer>
           <S.Input
             isFocus={isFocus}
-            value={value} 
+            // value={value} 
             onChangeText={(e: any) => {
               onChange(e)
             }}
